@@ -1,0 +1,36 @@
+/* media-queries.css */
+
+/* media-queries.css */
+@media (max-width: 1920px) {
+  .secc-news {
+    overflow-y: auto;
+  }
+
+  .container {
+    grid-template-columns: 1fr 2fr 1fr; /* Ajusta la distribución si es necesario */
+  }
+}
+
+
+
+@media (max-width: 1200px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+  
+  .contacts,
+  .secc-news {
+    display: none;
+  }
+
+  .secc {
+    grid-column: 1 / -1;
+    padding-top: 1rem;
+  }
+
+  .header, 
+  .footer {
+    width: 100%;
+    padding: 0.5rem;
+  }
+}

@@ -1,0 +1,53 @@
+/*
+Seccion noticias
+*/
+
+.secc-news {
+    grid-column: 3 / 4;
+    grid-row: 2 / 3;
+    background-color: #2C2C2C;
+    padding: 1rem;
+    color: #F5F5F5;
+    border-left: 2px solid #F5F5F5;
+    height: 100vh; 
+    padding-top: 230px;
+    margin: 0;
+    right: 0;
+    width: 460px;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+  }
+  .secc-news::-webkit-scrollbar {
+    display: none; 
+  }
+  .ntc img {
+    max-width:70%; 
+    height: auto; 
+    display: block; 
+    margin: 1rem 0; 
+  }
+  .paginado{
+    font-size: 20px;
+  }
+  .secc-news h2{
+    background-image: url(../img/news/descarga.jfif);
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+  }
+  div>h2{
+    text-align: center;
+    font-weight: bold;
+    text-decoration: overline;
+   
+  }
+  .ntc> h3{
+    text-align: center;
+    font-weight: bold;
+  }
+  a{
+    color: #D4AF37;
+    text-decoration: none;
+    font-weight: bold;
+  }

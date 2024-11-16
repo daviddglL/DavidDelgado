@@ -1,0 +1,33 @@
+/* components.css */
+.button, .highlight {
+  background-color: #800020; 
+  color: #F5F5F5; 
+  border: none;
+  padding: 0.5rem 1rem;
+  margin-bottom:12px;
+  cursor: pointer;
+  border-radius: 8px;
+  }
+  a{
+    color: #D4AF37;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .button:hover {
+    background-color: #99122D;
+  }
+  
+  .servicio {
+    background-color: #1a1c1d;
+    border: 1px solid #F5F5F5;
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .servicio:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  }
+  

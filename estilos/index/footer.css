@@ -1,0 +1,9 @@
+.footer {
+  grid-column: 1 / -1; /* Ocupa todas las columnas */
+  grid-row: 3 / 4;     /* Última fila */
+  background-color: #2C2C2C;
+  padding: 10px;
+  text-align: center;
+  color: #D4AF37;
+  border-top: 2px solid #F5F5F5;
+}

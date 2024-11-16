@@ -1,0 +1,165 @@
+/**
+testimonios
+*/
+
+.testimonios {
+  background-color: #2C2C2C;
+  padding: 2rem;
+  border-radius: 10px;
+  color: #F5F5F5;
+  text-align: center;
+}
+
+.testimonios h2{
+  text-decoration: none;
+}
+
+.testimonio {
+  background-color: #1a1c1d;
+  border: 1px solid #F5F5F5;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+.imagen-perfil {
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+
+blockquote {
+  margin: 0;
+  font-style: italic;
+}
+
+.autor {
+  font-size: 0.9rem;
+  text-align: end;
+  color: #D4AF37;
+  margin-top: 0.5rem;
+}
+
+/**
+Seccion servicios
+*/
+.secc::-webkit-scrollbar {
+  display: none; 
+}
+.secc-news::-webkit-scrollbar {
+  display: none; 
+}
+.servicios {
+  background-color: #2C2C2C;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+  color: #F5F5F5; 
+  text-align: center;
+  margin-top: 220px;
+  margin-bottom: 50px;
+}
+
+.servicios h2{
+  text-decoration:none;
+}
+
+.servicio {
+  background-color: #1a1c1d; 
+  border: 1px solid #F5F5F5; 
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.servicio:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+.servicio h3 {
+  color: #D4AF37; 
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.servicio p {
+  color: #aaaebc; 
+  line-height: 1.6;
+}
+
+
+
+/* Animación de borde para títulos */
+.titulo-animado {
+  display: inline-block;
+  position: relative;
+  color: #F5F5F5;
+  padding: 10px;
+}
+
+.titulo-animado .border {
+  position: absolute;
+  background: currentColor;
+  transition: transform var(--transition-duration) ease-in-out;
+}
+
+.titulo-animado .border-top,
+.titulo-animado .border-bottom {
+  width: 100%;
+  height: 1px;
+  left: 0;
+  transform: scaleX(0);
+}
+
+.titulo-animado .border-left,
+.titulo-animado .border-right {
+  width: 1px;
+  height: 100%;
+  top: 0;
+  transform: scaleY(0);
+}
+
+.titulo-animado .border-top {
+  top: 0;
+  transform-origin: top left;
+}
+
+.titulo-animado .border-bottom {
+  bottom: 0;
+  transform-origin: bottom right;
+}
+
+.titulo-animado .border-left {
+  left: 0;
+  transform-origin: bottom left;
+}
+
+.titulo-animado .border-right {
+  right: 0;
+  transform-origin: top right;
+}
+
+.titulo-animado:hover .border-top,
+.titulo-animado:hover .border-bottom {
+  transform: scaleX(1);
+}
+
+.titulo-animado:hover .border-left,
+.titulo-animado:hover .border-right {
+  transform: scaleY(1);
+}
+
+.noticias{
+  visibility: hidden;
+}
+
+
+

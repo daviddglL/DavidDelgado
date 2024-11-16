@@ -1,0 +1,20 @@
+/* styles.css */
+@import url('reset.css');
+@import url('base.css');
+@import url('layout.css');
+@import url('index/header.css');
+@import url('index/footer.css');
+@import url('components.css');
+@import url('index/sections.css');
+@import url('media-queries.css');
+@import url('index/news.css');
+@import url('index/contact.css');
+
+
+
+
+
+/**
+efectos: https://webdesign.tutsplus.com/es/how-to-create-different-css-hover-effects-from-scratch--cms-34222t
+titulos :https://fontmeme.com/fuentes/fuente-dreams-american-diner/#google_vignette
+**/

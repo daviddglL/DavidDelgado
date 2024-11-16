@@ -1,0 +1,31 @@
+/* layout.css */
+.container {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr; /* Tres columnas */
+  grid-template-rows: auto 1fr auto;  /* Header, Contenido, Footer */
+  min-height: 100vh;                  /* Asegura que ocupe toda la pantalla */
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #0A0A0A;
+  color: #F5F5F5;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+
+.secc {
+  grid-column: 2 / 3;     
+  grid-row: 2 / 3;        
+  background-color: #0A0A0A;
+  padding: 1rem;
+  padding-top: 30px;
+  margin: 0;
+  overflow-y: auto;       
+  max-height: 123vh; 
+  box-sizing: border-box;
+  -ms-overflow-style: none;
+}
+.secc::-webkit-scrollbar {
+  display: none; 
+}
