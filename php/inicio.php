@@ -5,7 +5,7 @@ function headerr(){
     echo"<h2><img src='https://fontmeme.com/permalink/241029/1dfbd7c9ac4977d0c92450b4eec0fb06.png' alt='fuente-dreams-american-diner' border='0'></h2>";
     echo "<ul class='menu' data-animation='diagonal'>";
         echo "<li>";
-            echo "<a href='/index.php'>
+            echo "<a href='/../DavidDelgado/index.php'>
                             Inicio
                             <span class='border border-top'></span>
                             <span class='border border-right'></span>
@@ -14,7 +14,7 @@ function headerr(){
                 </a>";
         echo "</li>";
         echo "<li>";
-            echo "<a href='/index.php'>
+            echo "<a href='/DavidDelgado/php/testimonios/testimonios_formulario.php'>
                             Sobre Nosotros
                             <span class='border border-top'></span>
                             <span class='border border-right'></span>
@@ -22,8 +22,39 @@ function headerr(){
                             <span class='border border-left'></span>
                 </a>";
         echo "</li>";
-        echo "<li class='noticias'>";
-            echo "<a href=''>
+        
+        echo "<li>";
+            echo "<a href='/DavidDelgado/php/servicios/servicios_formulario.php'>
+                            Servicios
+                            <span class='border border-top'></span>
+                            <span class='border border-right'></span>
+                            <span class='border border-bottom'></span>
+                            <span class='border border-left'></span>
+                </a>";
+        echo "</li>";
+
+        echo "<li>";
+        echo "<a href='/DavidDelgado/php/citas/citas_formulario.php'>
+                        Citas
+                        <span class='border border-top'></span>
+                        <span class='border border-right'></span>
+                        <span class='border border-bottom'></span>
+                        <span class='border border-left'></span>
+            </a>";
+        echo "</li>";
+
+        echo "<li>";
+        echo "<a href='/DavidDelgado/php/socios/socios_formulario.php'>
+                        Socios
+                        <span class='border border-top'></span>
+                        <span class='border border-right'></span>
+                        <span class='border border-bottom'></span>
+                        <span class='border border-left'></span>
+            </a>";
+        echo "</li>";
+
+        echo "<li>";
+            echo "<a href='/DavidDelgado/php/noticias/noticias_file.php'>
                             Noticias
                             <span class='border border-top'></span>
                             <span class='border border-right'></span>
@@ -31,6 +62,19 @@ function headerr(){
                             <span class='border border-left'></span>
                 </a>";
         echo "</li>";
+
+        echo "<li>";
+        echo "<a href='/DavidDelgado/php/dietas/dietas.php'>
+                        Dietas
+                        <span class='border border-top'></span>
+                        <span class='border border-right'></span>
+                        <span class='border border-bottom'></span>
+                        <span class='border border-left'></span>
+            </a>";
+    echo "</li>";
+
+
+        
     echo "</ul>";
     echo "</div>";
 }
@@ -70,10 +114,9 @@ function contactos(){
                 <p>Sábado y Domingo: 10:00 - 14:00</p>
                 </div>
 
-                
-                <div class='contacto-item'>
+                <div class='contacto-item' id='socios'>
                 <h3>Cree su cuenta de forma gratuita</h3>
-                <p class='contacto'><a  href='php/socios/socios_formulario.php'>Crear cuenta</a></p>
+                <p class='contacto'><a  href='/DavidDelgado/php/socios/socios_formulario.php'>Crear cuenta</a></p>
                 </div>
 
             </div>

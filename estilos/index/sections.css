@@ -9,6 +9,18 @@ testimonios
   color: #F5F5F5;
   text-align: center;
 }
+.testimonios_class{
+  background-color: #2C2C2C;
+  padding: 2rem;
+  border-radius: 10px;
+  color: #F5F5F5;
+  text-align: center;
+  margin-top: 200px;
+}
+
+.testimonios_class h2{
+  text-decoration: none;
+}
 
 .testimonios h2{
   text-decoration: none;

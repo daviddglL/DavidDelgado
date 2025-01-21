@@ -1,4 +1,4 @@
-CREATE DATABASE club_primos;
+
 
 -- Dropping tables if they exist
 DROP TABLE IF EXISTS citas;
@@ -42,26 +42,30 @@ CREATE TABLE noticia (
     contenido TEXT NOT NULL,
     imagen VARCHAR(255),
     fecha_publicacion DATE NOT NULL
+    
+
 );
 
 -- Creating 'citas' table
 CREATE TABLE citas (
+    id_cita INT AUTO_INCREMENT PRIMARY KEY,
     codigo_socio INT,
     codigo_servicio INT,
     fecha_cita DATE NOT NULL,
     hora_cita TIME NOT NULL,
-    PRIMARY KEY (codigo_socio, codigo_servicio, fecha_cita, hora_cita),
+    estado ENUM('pendiente', 'anulada', 'completada') DEFAULT 'pendiente',
     FOREIGN KEY (codigo_socio) REFERENCES socio(id_socio),
     FOREIGN KEY (codigo_servicio) REFERENCES servicio(codigo_servicio)
 );
 
 -- Inserting sample data into 'socio' table
 INSERT INTO socio (nombre, edad, contrasena, usuario, telefono, foto) VALUES
-('Carlos Perez', 30, 'password123', 'cperez', '123456789', 'img/socios/preview (2).webp'),
-('Ana Lopez', 25, 'securepass', 'alopez', '987654321', 'img/socios/preview (1).webp'),
-('Luis Gomez', 28, 'mypassword', 'lgomez', '456123789', 'img/socios/preview.webp'),
-('Mariana Torres', 32, 'password456', 'mtorres', '159753486', 'img/socios/preview.webp'),
-('Javier Morales', 22, 'pass789', 'jmorales', '753951486', 'img/socios/preview.webp');
+('Anonimo', 100, 'contraseña1234', 'anonimo', '159753486', 'anonimo'),
+('Carlos Perez', 30, 'password123', 'cperez', '123456789', 'hombre1'),
+('Ana Lopez', 25, 'securepass', 'alopez', '987654321', 'mujer1'),
+('Luis Gomez', 28, 'mypassword', 'lgomez', '456123789', 'hombre2'),
+('Mariana Torres', 32, 'password456', 'mtorres', '159753486', 'mujer2'),
+('Javier Morales', 22, 'pass789', 'jmorales', '753951486', 'hombre3');
 
 -- Inserting sample data into 'servicio' table
 INSERT INTO servicio (descripcion, duracion_servicio, precio_servicio) VALUES
@@ -76,29 +80,55 @@ INSERT INTO servicio (descripcion, duracion_servicio, precio_servicio) VALUES
 INSERT INTO testimonio (autor, contenido, fecha) VALUES
 (1, 'Me encantó la clase de calistenia, muy motivadora.', '2024-11-01'),
 (2, 'Las sesiones de calistenia intermedia son un desafío agradable.', '2024-11-02'),
-(3, 'La calistenia avanzada es intensa, pero vale la pena.', '2024-11-03');
+(3, 'La calistenia avanzada es intensa, pero vale la pena.', '2024-11-03'),
+(1, 'Las instalaciones del club son de primera calidad, me encanta venir aquí.', '2024-11-04'),
+(2, 'El personal siempre es amable y está dispuesto a ayudar.', '2024-11-05'),
+(3, 'Gracias a las clases de yoga, me siento más relajado y en forma.', '2024-11-06'),
+(4, 'Las actividades grupales me han ayudado a conocer a personas increíbles.', '2024-11-07'),
+(5, 'Los entrenadores son muy profesionales y atentos.', '2024-11-08'),
+(1, 'Nunca pensé que disfrutaría tanto de las clases de spinning.', '2024-11-09'),
+(2, 'Las sesiones de HIIT son intensas pero me hacen sentir súper energizado.', '2024-11-10'),
+(3, 'He mejorado mi resistencia gracias a las rutinas personalizadas.', '2024-11-11'),
+(4, 'Me encanta que el club siempre tenga actividades nuevas para probar.', '2024-11-12'),
+(5, 'El ambiente en el club es motivador y acogedor.', '2024-11-13');
+
 
 -- Inserting sample data into 'noticia' table
 INSERT INTO noticia (titulo, contenido, imagen, fecha_publicacion) VALUES
 ('Primera Carrera Anual del Club Deportivo',
- 'Nuestro club deportivo se complace en anunciar la celebración de nuestra Primera Carrera Anual, un evento pensado para unir a la comunidad en torno a la actividad física y la diversión. La carrera, que se realizará el 20 de noviembre, contará con circuitos de 5K y 10K, diseñados para adaptarse a todos los niveles de condición física. \n\nLos participantes podrán disfrutar de refrescos y snacks al finalizar la carrera, y se entregarán medallas y premios a los ganadores de cada categoría. Las inscripciones están abiertas en la recepción del club y cerrarán el día anterior al evento. ¡Invitamos a todos los socios a sumarse y celebrar con nosotros este primer gran evento deportivo!',
- 'img/news/images.jpg', '2024-11-01'),
+ 'Nuestro club deportivo se complace en anunciar la celebración de nuestra Primera Carrera Anual, un evento diseñado para fomentar la actividad física, fortalecer los lazos comunitarios y disfrutar de una experiencia llena de entusiasmo y energía. La carrera se llevará a cabo el 20 de noviembre e incluirá circuitos de 5K y 10K, cuidadosamente diseñados para adaptarse a participantes de todos los niveles de condición física, desde principiantes hasta corredores experimentados.
+ Además del desafío físico, queremos que este sea un evento inolvidable. Por ello, al finalizar la carrera, los participantes serán recibidos con refrescos y snacks saludables para recargar energías. También se realizará una ceremonia de premiación, donde se entregarán medallas conmemorativas para todos los que crucen la meta y premios especiales para los ganadores de cada categoría.\n  
+ Para garantizar una organización óptima, las inscripciones están abiertas en la recepción del club y cerrarán el 19 de noviembre. Los participantes inscritos recibirán un kit que incluye un número oficial, una camiseta exclusiva del evento y acceso a una charla previa sobre técnicas de carrera y calentamiento, impartida por nuestros entrenadores expertos.  
+ Invitamos a todos nuestros socios y a sus familias a unirse a esta gran celebración deportiva. Ya sea participando en los circuitos, animando desde las gradas o simplemente compartiendo la experiencia, ¡todos son bienvenidos! No te pierdas esta oportunidad de ser parte de un evento que promete convertirse en una tradición anual. ¡Corre con nosotros y haz historia en nuestro club!',
+ 'carrera', '2024-11-01'),
 
 ('Semana de Puertas Abiertas para Nuevos Miembros',
- 'Del 6 al 12 de noviembre, nuestro club estará celebrando su Semana de Puertas Abiertas. Durante estos días, todas las personas interesadas en conocer nuestras instalaciones podrán hacerlo sin costo alguno. Podrán acceder a nuestras áreas de entrenamiento, participar en clases de prueba y descubrir los beneficios de ser socio. \n\nOfreceremos demostraciones de calistenia, yoga, entrenamiento funcional, y también habrá sesiones de orientación con nuestros entrenadores para resolver todas las dudas sobre los servicios. ¡Invita a tus amigos y familiares para que vivan la experiencia de nuestro club deportivo!',
- 'img/news/images.jpg', '2024-11-03'),
+ 'Del 6 al 12 de noviembre, nuestro club estará celebrando su tan esperada Semana de Puertas Abiertas. Durante estos días, queremos compartir con toda la comunidad la oportunidad de descubrir lo que hace especial a nuestro club, ofreciendo acceso completamente gratuito a nuestras instalaciones y actividades. Este evento es ideal para quienes deseen conocer nuestro enfoque integral de entrenamiento y bienestar.
+ Entre las actividades destacadas, los visitantes podrán explorar nuestras áreas de entrenamiento, probar equipos de última generación y participar en clases de prueba de disciplinas como calistenia, yoga y entrenamiento funcional. Además, ofreceremos sesiones especiales de pilates y estiramientos, diseñadas para brindar una muestra de los beneficios físicos y mentales que estas prácticas pueden ofrecer. \n
+ Como parte del evento, hemos preparado demostraciones exclusivas de nuestros programas de entrenamiento más populares, guiadas por nuestros instructores certificados. También estarán disponibles sesiones de orientación individualizadas, donde nuestros entrenadores responderán preguntas sobre planes de entrenamiento, nutrición y servicios personalizados para ayudar a los participantes a alcanzar sus metas de salud.
+ Invitamos a nuestros socios a compartir esta experiencia con amigos y familiares, permitiéndoles disfrutar de un entorno dinámico y motivador. No pierdas esta oportunidad de mostrarles cómo el deporte y el bienestar pueden ser parte de su día a día. ¡Te esperamos para vivir juntos esta celebración!',
+ 'puertas-abiertas', '2024-11-03'),
 
 ('Renovación de las Instalaciones de Pesas Libres',
- 'Con el objetivo de mejorar la experiencia de nuestros socios, el área de pesas libres estará siendo renovada entre el 13 y el 15 de noviembre. Durante estos días, se instalarán nuevos equipos de última tecnología, incluyendo racks ajustables, barras olímpicas y mancuernas de varias categorías para satisfacer las necesidades de todos los niveles.\n\nAgradecemos la comprensión de nuestros socios, ya que el área permanecerá cerrada mientras se realicen las mejoras. Estamos comprometidos en ofrecer un espacio seguro, cómodo y con lo mejor en tecnología para ayudar a cada socio a alcanzar sus metas de acondicionamiento físico.',
- 'img/news/images.jpg', '2024-11-05'),
+ 'Con el objetivo de mejorar la experiencia de nuestros socios, el área de pesas libres estará siendo renovada entre el 13 y el 15 de noviembre. Durante este periodo, se llevará a cabo la instalación de nuevos equipos de última tecnología que buscan satisfacer las necesidades tanto de principiantes como de usuarios avanzados. Entre las mejoras destacan la incorporación de racks ajustables, barras olímpicas de alto rendimiento, y una amplia variedad de mancuernas de diferentes pesos, diseñadas para cubrir todos los niveles de entrenamiento.
+ Además, se realizará una reestructuración del espacio para optimizar la distribución de los equipos, permitiendo un flujo más cómodo y seguro durante los entrenamientos. También se instalará un nuevo sistema de ventilación y mejoras en la iluminación, creando un ambiente más agradable y funcional para el desarrollo de las actividades físicas.   \n
+ Entendemos que el cierre temporal del área pueda generar inconvenientes, por lo que agradecemos de antemano la comprensión de nuestros socios. Queremos asegurarte que estas mejoras están pensadas para ofrecerte un espacio de entrenamiento más moderno, seguro y eficiente, que esté a la altura de tus objetivos de acondicionamiento físico. 
+ Te invitamos a utilizar las otras áreas del club durante estos días y, si tienes dudas o necesitas recomendaciones sobre cómo ajustar tu rutina mientras se completan los trabajos, nuestro equipo estará encantado de ayudarte. Estamos emocionados de compartir contigo este nuevo espacio a partir del 16 de noviembre, ¡y esperamos que disfrutes de todos los beneficios que traerá!',
+ 'pesas', '2024-11-05'),
 
 ('Conferencia sobre Nutrición Deportiva con el Dr. Luis Ramírez',
- 'Este 16 de noviembre, nuestro club tiene el honor de recibir al Dr. Luis Ramírez, un destacado especialista en nutrición deportiva. El Dr. Ramírez ofrecerá una conferencia titulada "Alimentación y Rendimiento Físico", en la que hablará sobre los fundamentos de una dieta equilibrada para optimizar el rendimiento en el deporte.\n\nDurante la charla, los asistentes aprenderán sobre cómo ajustar su dieta para mejorar su energía, recuperación y resistencia en diversas disciplinas deportivas. La entrada será gratuita para socios, pero el cupo es limitado. Asegura tu lugar registrándote en la recepción.',
- 'img/news/images.jpg', '2024-11-07'),
+ 'Este 16 de noviembre, nuestro club tiene el honor de recibir al Dr. Luis Ramírez, un destacado especialista en nutrición deportiva con más de 15 años de experiencia asesorando a atletas de élite y aficionados. Durante su visita, el Dr. Ramírez ofrecerá una conferencia titulada "Alimentación y Rendimiento Físico", en la que abordará los principios fundamentales de una dieta equilibrada diseñada para optimizar el rendimiento en el deporte y promover una salud integral. 
+ En esta charla, los asistentes tendrán la oportunidad de aprender cómo ajustar su alimentación para maximizar la energía antes del ejercicio, acelerar la recuperación después de entrenamientos intensos y mejorar la resistencia en actividades de alto rendimiento. Además, se discutirán temas como la hidratación adecuada, el uso de suplementos y estrategias para adaptar las dietas según los diferentes tipos de deportes y objetivos personales.  \n  
+ El Dr. Ramírez también compartirá estudios de casos prácticos y brindará consejos específicos sobre cómo superar desafíos comunes relacionados con la nutrición, como el manejo de lesiones o la preparación para competencias importantes. Al final de la conferencia, se abrirá un espacio para una sesión de preguntas y respuestas, donde los participantes podrán resolver dudas y recibir recomendaciones personalizadas. 
+ La entrada a este evento será completamente gratuita para los socios del club, pero debido a la alta demanda, los cupos son limitados. Te invitamos a asegurar tu lugar registrándote en recepción antes del 14 de noviembre. No pierdas la oportunidad de adquirir conocimientos valiosos que podrán marcar una diferencia en tu desempeño deportivo. ¡Te esperamos!',
+ 'nutricion', '2024-11-07'),
 
 ('Clase Especial de Entrenamiento Funcional para Adultos Mayores',
- 'Como parte de nuestro compromiso con el bienestar de todos nuestros socios, el 20 de noviembre estaremos ofreciendo una clase especial de entrenamiento funcional enfocada en adultos mayores. Esta sesión se centrará en ejercicios de bajo impacto diseñados para mejorar la movilidad, el equilibrio y la fuerza, fundamentales para una vida activa y saludable.\n\nNuestros instructores certificados guiarán a los participantes en cada ejercicio, asegurando que se realicen de forma segura y efectiva. Si tienes familiares interesados en participar, anímalos a inscribirse en recepción y aprovechar esta oportunidad única.',
- 'img/news/images.jpg', '2024-11-10');
+ 'Como parte de nuestro compromiso con el bienestar de todos nuestros socios, el 20 de noviembre estaremos ofreciendo una clase especial de entrenamiento funcional enfocada en adultos mayores. Esta sesión, diseñada específicamente para cubrir las necesidades de esta etapa de la vida, se centrará en ejercicios de bajo impacto que ayudarán a mejorar la movilidad, el equilibrio, la fuerza y la coordinación. Estas habilidades son fundamentales no solo para mantener una vida activa y saludable, sino también para prevenir caídas y otros problemas asociados con la pérdida de movilidad. 
+  Durante la sesión, nuestros instructores certificados, con amplia experiencia en trabajo con adultos mayores, guiarán a los participantes en cada ejercicio, asegurándose de que se realicen de forma segura y efectiva. Además, se ofrecerán adaptaciones personalizadas para que cada asistente pueda trabajar a su propio ritmo y nivel de capacidad física, promoviendo un ambiente inclusivo y accesible para todos.   \n  
+  Al final de la clase, se dedicará un tiempo a resolver dudas y compartir consejos sobre cómo incorporar estos ejercicios en la vida diaria. También se proporcionará una guía con recomendaciones para mantener una rutina de ejercicios regular en casa, fortaleciendo el compromiso con la salud y el bienestar a largo plazo. 
+  Si tienes familiares interesados en participar, te invitamos a animarlos a inscribirse en recepción antes del 18 de noviembre, ya que los cupos son limitados. Esta es una oportunidad única para disfrutar de un momento de actividad física supervisada, rodeado de un ambiente de camaradería y apoyo mutuo. ¡No te lo pierdas!',
+ 'entrenamiento-personas-mayores', '2024-11-10');
 
 
 -- Inserting sample data into 'citas' table

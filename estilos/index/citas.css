@@ -1,0 +1,120 @@
+.navigation{
+    margin-top: 200px;
+}
+.calendar-table {
+    width: 100%;
+    height: auto;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.citas {
+margin: 20px auto;
+max-width: 800px;
+padding: 20px;
+background-color: #1e1e2f;
+border-radius: 10px;
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+color: #f0f0f0;
+}
+
+.citas h3 {
+text-align: center;
+margin-bottom: 20px;
+color: #D4AF37; 
+text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+}
+
+.appointment-table {
+width: 100%;
+border-collapse: collapse;
+margin: 0 auto;
+font-size: 16px;
+}
+
+.appointment-table th,
+.appointment-table td {
+text-align: center;
+padding: 12px 15px;
+}
+
+.appointment-table th {
+background-color: #2b2b3d;
+color: #D4AF37; /* Dorado */
+font-weight: bold;
+border-bottom: 3px solid #f0f0f0;
+}
+
+.appointment-table tr:nth-child(even) {
+background-color: #292941;
+}
+
+.appointment-table tr:nth-child(odd) {
+background-color: #1e1e2f;
+}
+
+.appointment-table td {
+border-bottom: 1px solid #444;
+color: #f0f0f0;
+}
+
+.appointment-table tr:hover {
+background-color: #35354f;
+
+}
+.month{
+    font-size: 22px;
+}
+.calendar-table th, .calendar-table td {
+    border: 1px solid black;
+    padding: 8px;
+    padding: 16px; 
+    min-width: 50px; 
+    text-align: center;
+}
+
+.calendar-table th {
+    background-color: #800020;
+    color: #D4AF37;
+}
+.borrar{
+    padding: 0%;
+    background-color: #800020;
+    font-weight: bold;
+}
+.delete-button {
+    background-color: #800020;
+    font-weight: bold;
+    color: #D4AF37;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+    background-color: #b52b37;
+}
+
+.cancel-button {
+    background-color: #800020;
+    font-weight: bold;
+    color: #D4AF37;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cancel-button:hover {
+    background-color: #b52b37;
+}
+
+
+.completed-message {
+    color: #D4AF37; 
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #800020;
+}
