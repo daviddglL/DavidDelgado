@@ -22,10 +22,13 @@ document.getElementById('searchForm').addEventListener('submit', async function 
     // Procesa y muestra los resultados
     resultsContainer.innerHTML = '';
     if (data.hits && data.hits.length > 0) {
+      const container = document.createElement('div');
+      container.classList.add('cards-container');
+    
       data.hits.forEach(hit => {
         const recipe = hit.recipe;
         const div = document.createElement('div');
-        div.classList.add('recipe-card');
+        div.classList.add('cards');
         div.innerHTML = `
           <img src="${recipe.image}" alt="${recipe.label}">
           <h3>${recipe.label}</h3>
@@ -36,11 +39,14 @@ document.getElementById('searchForm').addEventListener('submit', async function 
           </ul>
           <a href="${recipe.url}" target="_blank">Ver receta completa</a>
         `;
-        resultsContainer.appendChild(div);
+        container.appendChild(div);
       });
+    
+      resultsContainer.appendChild(container);
     } else {
       resultsContainer.innerHTML = 'No se encontraron recetas.';
     }
+    
   } catch (error) {
     resultsContainer.innerHTML = `Hubo un error: ${error.message}`;
   }
