@@ -73,6 +73,15 @@ function headerr(){
             </a>";
     echo "</li>";
 
+    echo "<li>";
+    echo "<a href='/DavidDelgado/php/productos/productos.php'>
+                    Productos
+                    <span class='border border-top'></span>
+                    <span class='border border-right'></span>
+                    <span class='border border-bottom'></span>
+                    <span class='border border-left'></span>
+        </a>";
+echo "</li>";
 
         
     echo "</ul>";
