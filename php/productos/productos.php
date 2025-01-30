@@ -2,7 +2,7 @@
 // Configuración de la API con parámetros de paginación
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
 $limit = isset($_GET['limit']) && is_numeric($_GET['limit']) ? (int)$_GET['limit'] : 10;
-$apiUrl = "http://localhost/club_deportivo/productos/productos.php?page=$page&limit=$limit"; // Cambia esta URL al endpoint correcto
+$apiUrl = "http://localhost/club_deportivo/productos/api.php?page=$page&limit=$limit"; // Cambia esta URL al endpoint correcto
 
 ?>
 
@@ -32,7 +32,7 @@ $apiUrl = "http://localhost/club_deportivo/productos/productos.php?page=$page&li
     <h1>Listado de Productos</h1>
 
     <!-- Enlace para añadir nuevo producto -->
-    <a href="agregar_producto.php" class="add">Añadir Nuevo Producto</a>
+
 
     <?php
         $ch = curl_init();
@@ -78,7 +78,7 @@ $apiUrl = "http://localhost/club_deportivo/productos/productos.php?page=$page&li
                 echo '<td>' . $producto['precio'] . ' €</td>';
                 echo '<td>' . $producto['descripcion'] . '</td>';
                 echo '<td>' . $producto['stock'] . '</td>';
-                echo '<td>' . ucfirst($producto['estado']) . '</td>';
+                echo '<td>' . $producto['estado'] . '</td>';
                 echo '<td><img src="' . $producto['imagen'] . '" alt="' . $producto['nombre'] . '" width="50"></td>';
                 echo '<td>' . ($producto['membresia'] ? 'Sí' : 'No') . '</td>';
                 echo '<td>';
@@ -114,7 +114,7 @@ $apiUrl = "http://localhost/club_deportivo/productos/productos.php?page=$page&li
     
             echo '</div>';
         } else {
-            echo "<p>" . $respuesta["error"] . "</p>";
+            echo "<p>" . $respuesta["error"] . "AYUDAAAAAA</p>";
         }
     ?>
 

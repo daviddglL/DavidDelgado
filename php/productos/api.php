@@ -6,8 +6,8 @@ header("Content-Type: application/json");
 
 
 // Configuración de la base de datos
-require_once "config.php";
-require_once "funciones.php";
+    require_once "../../connection/config.php";
+    require_once "../../connection/funciones.php";
 
 try {
     $conn = conectar($nombre_host, $nombre_usuario, $password_db, $nombre_db);
@@ -28,36 +28,37 @@ if($metodo =="POST" || $metodo=="PUT"){
 
 switch ($metodo) {
     case 'GET':
-        if (isset($_GET['id'])) {
-            // Obtener una asignatura por ID
-            $resultado=obtenerAsignaturas($conn,$_GET["id"]);
-            http_response_code($resultado["http"]);
-            echo json_encode($resultado["respuesta"]);
-
+        require_once 'api_funciones.php';
+    
+        $id = isset($_GET['id']) ? (is_numeric($_GET['id']) ? (int)$_GET['id'] : null) : null;
+        $nombre = isset($_GET['nombre']) ? $_GET['nombre'] : null;
+        $precio = isset($_GET['precio']) ? (is_numeric($_GET['precio']) ? (float)$_GET['precio'] : null) : null;
+        
+        if ($id !== null || $nombre !== null || $precio !== null) {
+            // Obtener productos filtrados
+            $resultado = obtenerProductos($conn, $id, $nombre, $precio);
         } else {
             // Parámetros de paginación con valores predeterminados
             $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
             $limit = isset($_GET['limit']) && is_numeric($_GET['limit']) ? (int)$_GET['limit'] : 10;
-
+    
             if ($page < 1 || $limit < 1) {
                 http_response_code(400); // Bad Request
-                echo json_encode([
-                    "error" => "Parámetros de paginación inválidos"
-                ]);
+                echo json_encode(["error" => "Parámetros de paginación inválidos"]);
                 die();
             }
-
-            $resultado=obtenerAsignaturasPag($conn,$page,$limit);
-            http_response_code($resultado["http"]);
-            echo json_encode($resultado["respuesta"]);
-
+    
+            $resultado = obtenerProductosPag($conn, $page, $limit);
         }
+    
+        http_response_code($resultado["http"]);
+        echo json_encode($resultado["respuesta"]);
         break;
     
 
     case 'POST':
-        if(isset($entrada["nombre_asignatura"]) && isset($entrada["creditos"])){
-            $resultado=crearAsignatura($conn,
+        if(isset($entrada["nombre"]) && isset($entrada["precio"]) && isset($entrada["descripcion"]) && isset($entrada["stock"]) && isset($entrada["imagen"]) && isset($entrada["membresia"])){
+            $resultado=crearProducto($conn,
                                             $entrada["nombre"],
                                             $entrada["precio"],
                                        $entrada["descripcion"],
@@ -76,7 +77,7 @@ switch ($metodo) {
 
     case 'PUT':
         if(isset($entrada["id"]) && isset($entrada["nombre"]) && isset($entrada["precio"]) && isset($entrada["descripcion"]) && isset($entrada["stock"]) && isset($entrada["imagen"]) && isset($entrada["membresia"])){
-            $resultado=modificarAsignatura($conn,
+            $resultado=modificarProducto($conn,
                                     $entrada["id"],
                                     $entrada["nombre"],
                                     $entrada["precio"],
@@ -96,7 +97,7 @@ switch ($metodo) {
 
     case 'DELETE':
         if(isset($_GET["id"])){
-            $resultado=borrarAsignatura($conn,$_GET["id"]);
+            $resultado=borrarProducto($conn,$_GET["id"]);
             http_response_code($resultado["http"]);
             echo json_encode($resultado["respuesta"]);
         }else{
