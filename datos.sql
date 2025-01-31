@@ -70,6 +70,30 @@ CREATE TABLE citas (
     FOREIGN KEY (codigo_servicio) REFERENCES servicio(codigo_servicio)
 );
 
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('admin', 'user') NOT NULL DEFAULT 'user',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE api_keys (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    api_key VARCHAR(64) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+
+INSERT INTO users (nombre, email, password, role) VALUES
+('Admin', 'admin@example.com', SHA2('adminpassword', 256), 'admin'),
+('Usuario1', 'user1@example.com', SHA2('userpassword', 256), 'user');
+
+
+
 -- Inserting sample data into 'socio' table
 INSERT INTO socio (nombre, edad, contrasena, usuario, telefono, foto) VALUES
 ('Anonimo', 100, 'contraseña1234', 'anonimo', '159753486', 'anonimo'),

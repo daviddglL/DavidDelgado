@@ -8,6 +8,26 @@ header("Content-Type: application/json");
 // Configuración de la base de datos
     require_once "../../connection/config.php";
     require_once "../../connection/funciones.php";
+/*    require_once("../api/apikey.php");
+function validateApiKey($apiKey, $pdo) {
+    $stmt = $pdo->prepare("SELECT user_id FROM api_keys WHERE api_key = ?");
+    $stmt->execute([$apiKey]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+// Recibir API key de la petición (por encabezado o parámetro GET)
+$receivedApiKey = $_GET['api_key'] ?? '';
+
+if ($user = validateApiKey($receivedApiKey, $pdo)) {
+    echo json_encode(["message" => "API Key válida. Usuario ID: " . $user['user_id']]);
+} else {
+    http_response_code(401);
+    echo json_encode(["error" => "API Key no válida."]);
+}
+
+*/
+
+
 
 try {
     $conn = conectar($nombre_host, $nombre_usuario, $password_db, $nombre_db);
@@ -23,8 +43,6 @@ $metodo = $_SERVER['REQUEST_METHOD'];
 if($metodo =="POST" || $metodo=="PUT"){
     $entrada=json_decode(file_get_contents("php://input"),true);
 }
-
-
 
 switch ($metodo) {
     case 'GET':

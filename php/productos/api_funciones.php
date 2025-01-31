@@ -7,50 +7,43 @@
     $conexion = conectar($nombre_host, $nombre_usuario, $password_db, $nombre_db);
 
 	function obtenerProductos($conexion, $id_producto = null, $nombre = null, $precio = null) {
-
 		
 		$condiciones = [];
 		$parametros = [];
 		$tipos = "";
 		
-		// Filtrar por ID
 		if (!is_null($id_producto) && is_numeric($id_producto)) {
 			$condiciones[] = "id = ?";
 			$parametros[] = $id_producto;
-			$tipos .= "i"; // Tipo entero
+			$tipos .= "i"; 
 		}
 		
-		// Filtrar por Nombre (LIKE)
 		if (!is_null($nombre) && $nombre !== "") {
 			$condiciones[] = "nombre LIKE ?";
-			$parametros[] = "%$nombre%"; // Búsqueda parcial con LIKE
-			$tipos .= "s"; // Tipo string
+			$parametros[] = "%$nombre%"; 
+			$tipos .= "s"; 
 		}
 		
 
 		if (!is_null($precio) && is_numeric($precio)) {
 			$condiciones[] = "precio BETWEEN ? AND ?";
-			$parametros[] = $precio - 0.01;  // Rango inferior
-			$parametros[] = $precio + 0.01;  // Rango superior
+			$parametros[] = $precio - 0.01; 
+			$parametros[] = $precio + 0.01; 
 			$tipos .= "dd"; 
 		}
-
 	
 		// Construcción de la consulta SQL
 		$condicion_filtro = !empty($condiciones) ? " WHERE " . implode(" AND ", $condiciones) : "";
 		$consulta = "SELECT * FROM productos " . $condicion_filtro;
 	
-		// Depuración: Mostrar consulta construida
-		echo "Consulta: " . $consulta . "\n"; // Esto te ayudará a ver cómo se está construyendo la consulta
+		echo "Consulta: " . $consulta . "\n"; 
 	
-		// Preparar la consulta
 		$sentencia = $conexion->prepare($consulta);
 		
 		if (!$sentencia) {
 			return ["http" => 500, "respuesta" => ["error" => "Error en la consulta: " . $conexion->error]];
 		}
 		
-		// Bind de los parámetros si hay alguno
 		if (!empty($parametros)) {
 			$sentencia->bind_param($tipos, ...$parametros);
 		}
@@ -72,32 +65,6 @@
 		$sentencia->close();
 		return $salida;
 	}
-	
-
-	/*function obtenerProductoNombre($conexion,$nombre){
-		$consulta="SELECT * FROM productos WHERE LIKE nombre=?";
-		$sentencia=$conexion->prepare($consulta);
-		$nombre="%".$nombre."%";
-		$sentencia->bind_param("s",$nombre);
-		$sentencia->execute();
-		$resultado=$sentencia->get_result();
-		if($resultado->num_rows>0){
-			$datos=[];
-			while($fila=$resultado->fetch_assoc()){
-				$datos[]=[
-					"id"=>$fila["id"],
-					"nombre"=>$fila["nombre"],
-					"precio"=>$fila["precio"],
-					"descripcion"=>$fila["descripcion"],
-					"stock"=>$fila["stock"],
-					"estado"=>$fila["estado"],
-					"imagen"=>$fila["imagen"],
-					"membresia"=>$fila["membresia"]
-				];
-			}
-			$salida["http"]=200;
-			$salida["respuesta"]=["datos"=>$datos];
-	}}*/
 
 	function obtenerProductosPag($conexion,$pagina,$limite){
 		
