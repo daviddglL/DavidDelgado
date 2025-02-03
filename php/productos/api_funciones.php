@@ -66,57 +66,46 @@
 		return $salida;
 	}
 
-	function obtenerProductosPag($conexion,$pagina,$limite){
-		
-
-		$offset=($pagina-1)*$limite;
-		$consulta="SELECT * FROM productos 
-		           LIMIT ? OFFSET ?";
-
-		$sentencia=$conexion->prepare($consulta);
-		$sentencia->bind_param("ii",$limite,$offset);
+	function obtenerProductosPag($conexion, $pagina, $limite) {
+		$offset = ($pagina - 1) * $limite;
+		$consulta = "SELECT id, nombre, precio, descripcion, stock, estado, imagen, membresia FROM productos 
+					 LIMIT ? OFFSET ?";
+	
+		$sentencia = $conexion->prepare($consulta);
+		$sentencia->bind_param("ii", $limite, $offset);
 		$sentencia->execute();
-		$resultado=$sentencia->get_result();
-
-		if($resultado->num_rows>0){
-			$datos=[];
-			while($fila=$resultado->fetch_assoc()){
-				$datos[]=[
-					"id"=>$fila["id"],
-					"nombre"=>$fila["nombre"],
-					"precio"=>$fila["precio"],
-                    "descripcion"=>$fila["descripcion"],
-                    "stock"=>$fila["stock"],
-                    "estado"=>$fila["estado"],
-                    "imagen"=>$fila["imagen"]
-				];
+		$resultado = $sentencia->get_result();
+	
+		if ($resultado->num_rows > 0) {
+			$datos = [];
+			while ($fila = $resultado->fetch_assoc()) {
+				$datos[] = $fila;
 			}
-
-			$consulta="SELECT count(*) FROM productos";
-			$resultado=$conexion->query($consulta);
-			$fila=$resultado->fetch_row();
-			$total=$fila[0];
-
-			$salida["http"]=200;
-			$salida["respuesta"]=["datos"=>$datos,
-								  "paginacion"=>[
-									"actual"=>$pagina,
-									"limite"=>$limite,
-									"total"=>$total,
-									"paginas"=>ceil($total/$limite),
-									"anterior"=>null,
-									"siguiente"=>"http://...api.php?page=3&limit=$limite"
-
-								  ]	
-								];
+	
+			$consulta = "SELECT count(*) FROM productos";
+			$resultado = $conexion->query($consulta);
+			$fila = $resultado->fetch_row();
+			$total = $fila[0];
+	
+			$salida["http"] = 200;
+			$salida["respuesta"] = [
+				"datos" => $datos,
+				"paginacion" => [
+					"actual" => $pagina,
+					"limite" => $limite,
+					"total" => $total,
+					"paginas" => ceil($total / $limite)
+				]
+			];
 			$sentencia->close();
-		}else{
-			$salida["http"]=404;
-			$salida["respuesta"]=["error"=>"No hay resultados"];
+		} else {
+			$salida["http"] = 404;
+			$salida["respuesta"] = ["error" => "No hay resultados"];
 		}
-		
+	
 		return $salida;
 	}
+	
 
 	function crearProducto($conexion,$nombre,$precio,$descripcion,$stock,$imagen,$membresia){
 		

@@ -41,10 +41,10 @@ $apiUrl = "http://localhost/DavidDelgado/php/productos/api.php?page=$page&limit=
         echo "<h1>Listado de Productos</h1>";
     ?>
      <div class="search-container">
-            <h2>Buscar Servicio</h2>
+            <h2>Buscar Producto</h2>
 
-            <form method="GET" action="servicios_formulario.php" class="socios_form">
-                <input class="search_placeholder" type="text" name="search" placeholder="Nombre del servicio">
+            <form method="GET" action="api.php" class="socios_form">
+                <input class="search_placeholder" type="text" name="search" placeholder="Nombre del producto, precio">
                 <button type="submit" name="busqueda">Buscar</button>
             </form>  
         </div>
@@ -75,44 +75,25 @@ $apiUrl = "http://localhost/DavidDelgado/php/productos/api.php?page=$page&limit=
                 $actual = $paginacion['actual'];
                 $total = $paginacion['paginas'];
                 $limite = $paginacion['limite'];
-                
-                echo '<table>';
-                echo '<thead>';
-                echo '<tr>';
-                echo '<th>ID</th>';
-                echo '<th>Nombre</th>';
-                echo '<th>Precio</th>';
-                echo '<th>Descripción</th>';
-                echo '<th>Stock</th>';
-                echo '<th>Estado</th>';
-                echo '<th>Imagen</th>';
-                echo '<th>Membresía</th>';
-                echo '<th>Acciones</th>';
-                echo '</tr>';
-                echo '</thead>';
-                echo '<tbody>';
 
-                // Procesamos y mostramos los productos
+                echo "<div class='cards-container' id='cards-container'>";
+
                 foreach ($productos as $producto) {
-                    echo '<tr>';
-                    echo '<td>' . $producto['id'] . '</td>';
-                    echo '<td>' . $producto['nombre'] . '</td>';
-                    echo '<td>' . $producto['precio'] . ' €</td>';
-                    echo '<td>' . $producto['descripcion'] . '</td>';
-                    echo '<td>' . $producto['stock'] . '</td>';
-                    echo '<td>' . $producto['estado'] . '</td>';
-                    echo '<td><img src="' . $producto['imagen'] . '" alt="' . $producto['nombre'] . '" width="50"></td>';
-                    echo '<td>' . (isset($producto['membresia']) ? ($producto['membresia'] ? '1' : '2') : 'No definido') . '</td>';
-
-                    echo '<td>';
-                    echo '<a href="editar_producto.php?id=' . $producto['id'] . '" class="edit">Editar</a> | ';
-                    echo '<a href="borrar_producto.php?id=' . $producto['id'] . '" class="delete" onclick="return confirm(\'¿Seguro que quieres borrar este producto?\');">Borrar</a>';
-                    echo '</td>';
-                    echo '</tr>';
+                    echo "<div class='card'>";
+                    echo "<h3 class='titulo'>{$producto['nombre']}</h3>";
+                    echo "<img src='/../DavidDelgado/img/productos/" . $producto['imagen'] . ".jpg'>";
+                    echo "<p class='lista'>Precio:  {$producto['precio']}</p>";
+                    echo "<p class='lista'>Descripción:  {$producto['descripcion']}</p>";
+                    echo "<p class='lista'>Stock:  {$producto['stock']}</p>";
+                    echo "<p class='lista'>Estado:  {$producto['estado']}</p>";
+                    
+                    echo "<button class='button'><a href='/DavidDelgado/php/productos/editar_producto.php?id={$producto['id']}'>Editar</a></button>";
+        
+                    echo "</div>";
                 }
-
-                echo '</tbody>';
-                echo '</table>';
+        
+                echo "</div>";
+        
                 echo '<br>';
             
                 echo '<div class="pagination">';

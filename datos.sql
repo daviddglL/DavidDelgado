@@ -169,18 +169,18 @@ INSERT INTO noticia (titulo, contenido, imagen, fecha_publicacion) VALUES
 
 
 INSERT INTO productos (nombre, precio, descripcion, stock, estado, imagen, membresia) VALUES
-('Camiseta Deportiva', 19.99, 'Camiseta de algodón 100% para entrenamiento.', 50, 'disponible', 'camiseta.jpg', 1),
-('Balón de Fútbol', 29.99, 'Balón de fútbol oficial tamaño 5.', 30, 'disponible', 'balon.jpg', 0),
-('Botella de Agua', 9.50, 'Botella de agua reutilizable de 750ml.', 100, 'disponible', 'botella.jpg', 1),
-('Mancuernas', 49.99, 'Par de mancuernas de 10 kg cada una.', 20, 'disponible', 'mancuernas.jpg', 1),
-('Toalla de Entrenamiento', 12.00, 'Toalla ligera y absorbente.', 75, 'disponible', 'toalla.jpg', 0),
-('Gorra Deportiva', 14.99, 'Gorra ajustable con logo del club.', 40, 'no disponible', 'gorra.jpg', 1),
-('Zapatillas Running', 89.99, 'Zapatillas para correr con amortiguación avanzada.', 15, 'disponible', 'zapatillas.jpg', 1),
-('Cuerda para Saltar', 7.99, 'Cuerda de saltar ajustable con agarres cómodos.', 200, 'disponible', 'cuerda.jpg', 0),
-('Chándal Completo', 59.99, 'Chándal de dos piezas, ideal para invierno.', 10, 'no disponible', 'chandal.jpg', 1),
-('Raqueta de Tenis', 99.99, 'Raqueta de tenis profesional.', 8, 'disponible', 'raqueta.jpg', 1),
-('Protector Bucal', 5.50, 'Protector bucal para deportes de contacto.', 150, 'disponible', 'protector.jpg', 0),
-('Banda de Resistencia', 11.99, 'Banda de resistencia de nivel medio.', 80, 'disponible', 'banda.jpg', 0);
+('Camiseta Deportiva', 19.99, 'Camiseta de algodón 100% para entrenamiento.', 50, 'disponible', 'camiseta', 1),
+('Balón de Fútbol', 29.99, 'Balón de fútbol oficial tamaño 5.', 30, 'disponible', 'balon-de-futbol-soccer', 0),
+('Botella de Agua', 9.50, 'Botella de agua reutilizable de 750ml.', 100, 'disponible', 'botella', 1),
+('Mancuernas', 49.99, 'Par de mancuernas de 10 kg cada una.', 20, 'disponible', 'mancuerna', 1),
+('Toalla de Entrenamiento', 12.00, 'Toalla ligera y absorbente.', 75, 'disponible', 'toalla', 0),
+('Gorra Deportiva', 14.99, 'Gorra ajustable con logo del club.', 40, 'no disponible', 'gorra', 1),
+('Zapatillas Running', 89.99, 'Zapatillas para correr con amortiguación avanzada.', 15, 'disponible', 'zapatillas', 1),
+('Cuerda para Saltar', 7.99, 'Cuerda de saltar ajustable con agarres cómodos.', 200, 'disponible', 'comba', 0),
+('Chándal Completo', 59.99, 'Chándal de dos piezas, ideal para invierno.', 10, 'no disponible', 'chandal', 1),
+('Raqueta de Tenis', 99.99, 'Raqueta de tenis profesional.', 8, 'disponible', 'raqueta', 1),
+('Protector Bucal', 5.50, 'Protector bucal para deportes de contacto.', 150, 'disponible', 'bucal', 0),
+('Banda de Resistencia', 11.99, 'Banda de resistencia de nivel medio.', 80, 'disponible', 'cinta', 0);
 
 
 -- Inserting sample data into 'citas' table

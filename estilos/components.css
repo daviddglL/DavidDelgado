@@ -40,7 +40,7 @@
     padding: 20px;
     box-sizing: border-box;
   }
-  
+
   .card {
     background-color: #2C2C2C;
     padding: 15px;
@@ -92,4 +92,17 @@
 
   .cards h3{
     text-align: center;
+  }
+
+  .titulo{
+    text-align: center;
+    font-size: 2rem;
+    color: #D4AF37;
+    font-weight: bold;
+  }
+  .card p.lista{
+    font-weight: bold;
+    text-align: center;
+    align-items: center;
+
   }

@@ -93,25 +93,27 @@ switch ($metodo) {
         
         break;
 
-    case 'PUT':
-        if(isset($entrada["id"]) && isset($entrada["nombre"]) && isset($entrada["precio"]) && isset($entrada["descripcion"]) && isset($entrada["stock"]) && isset($entrada["imagen"]) && isset($entrada["membresia"])){
-            $resultado=modificarProducto($conn,
-                                    $entrada["id"],
-                                    $entrada["nombre"],
-                                    $entrada["precio"],
-                               $entrada["descripcion"],
-                                     $entrada["stock"],
-                                    $entrada["imagen"],
-                                 $entrada["membresia"],
-                                );
-
-        http_response_code($resultado["http"]);
-        echo json_encode($resultado["respuesta"]);
-        }else{
-            http_response_code(405);
-            echo json_encode(["error"=>"Faltan parametros"]);
-        }
-        break;
+        case 'PUT':
+            
+            if (isset($entrada["id"], $entrada["nombre"], $entrada["precio"], $entrada["descripcion"], $entrada["stock"], $entrada["imagen"], $entrada["membresia"])) {
+                $resultado = modificarProducto(
+                    $conn,
+                    $entrada["id"],
+                    $entrada["nombre"],
+                    $entrada["precio"],
+                    $entrada["descripcion"],
+                    $entrada["stock"],
+                    $entrada["imagen"],
+                    $entrada["membresia"]
+                );
+        
+                http_response_code($resultado["http"]);
+                echo json_encode($resultado["respuesta"]);
+            } else {
+                http_response_code(400);
+                echo json_encode(["error" => "Faltan parámetros"]);
+            }
+            break;        
 
     case 'DELETE':
         if(isset($_GET["id"])){
