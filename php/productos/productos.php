@@ -70,6 +70,7 @@ $apiUrl = "http://localhost/DavidDelgado/php/productos/api.php?page=$page&limit=
             
             curl_close($ch);
             if ($httpCode == 200) {
+               
                 $productos = $respuesta["datos"];
                 $paginacion = $respuesta["paginacion"];
                 $actual = $paginacion['actual'];
@@ -87,7 +88,8 @@ $apiUrl = "http://localhost/DavidDelgado/php/productos/api.php?page=$page&limit=
                     echo "<p class='lista'>Stock:  {$producto['stock']}</p>";
                     echo "<p class='lista'>Estado:  {$producto['estado']}</p>";
                     
-                    echo "<button class='button'><a href='/DavidDelgado/php/productos/editar_producto.php?id={$producto['id']}'>Editar</a></button>";
+                    echo "<button class='button'><a href='/DavidDelgado/php/productos/editar_producto.php?id_producto={$producto['id_producto']}'>Editar</a></button>";
+
         
                     echo "</div>";
                 }

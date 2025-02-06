@@ -47,7 +47,7 @@ CREATE TABLE noticia (
 );
 
 CREATE TABLE productos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_producto INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(45) NOT NULL,
     precio FLOAT NOT NULL,
     descripcion VARCHAR(100) NOT NULL,

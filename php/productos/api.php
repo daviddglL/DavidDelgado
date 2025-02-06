@@ -8,26 +8,6 @@ header("Content-Type: application/json");
 // Configuración de la base de datos
     require_once "../../connection/config.php";
     require_once "../../connection/funciones.php";
-/*    require_once("../api/apikey.php");
-function validateApiKey($apiKey, $pdo) {
-    $stmt = $pdo->prepare("SELECT user_id FROM api_keys WHERE api_key = ?");
-    $stmt->execute([$apiKey]);
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-}
-
-// Recibir API key de la petición (por encabezado o parámetro GET)
-$receivedApiKey = $_GET['api_key'] ?? '';
-
-if ($user = validateApiKey($receivedApiKey, $pdo)) {
-    echo json_encode(["message" => "API Key válida. Usuario ID: " . $user['user_id']]);
-} else {
-    http_response_code(401);
-    echo json_encode(["error" => "API Key no válida."]);
-}
-
-*/
-
-
 
 try {
     $conn = conectar($nombre_host, $nombre_usuario, $password_db, $nombre_db);
@@ -48,14 +28,17 @@ switch ($metodo) {
     case 'GET':
         require_once 'api_funciones.php';
     
-        $id = isset($_GET['id']) ? (is_numeric($_GET['id']) ? (int)$_GET['id'] : null) : null;
-        $nombre = isset($_GET['nombre']) ? $_GET['nombre'] : null;
-        $precio = isset($_GET['precio']) ? (is_numeric($_GET['precio']) ? (float)$_GET['precio'] : null) : null;
+        $id = isset($_GET['id_producto']) ? (int)$_GET['id_producto'] : null;
+        $nombre = isset($_GET['nombre']) ? trim($_GET['nombre']) : null;
+        $precio = isset($_GET['precio']) ? (float)$_GET['precio'] : null;   
         
         if ($id !== null || $nombre !== null || $precio !== null) {
-            // Obtener productos filtrados
+            
             $resultado = obtenerProductos($conn, $id, $nombre, $precio);
-        } else {
+        } 
+
+        else {
+            
             // Parámetros de paginación con valores predeterminados
             $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
             $limit = isset($_GET['limit']) && is_numeric($_GET['limit']) ? (int)$_GET['limit'] : 10;
@@ -95,15 +78,14 @@ switch ($metodo) {
 
         case 'PUT':
             
-            if (isset($entrada["id"], $entrada["nombre"], $entrada["precio"], $entrada["descripcion"], $entrada["stock"], $entrada["imagen"], $entrada["membresia"])) {
+            if (isset($entrada["id_producto"], $entrada["nombre"], $entrada["precio"], $entrada["descripcion"], $entrada["stock"], $entrada["membresia"])) {
                 $resultado = modificarProducto(
                     $conn,
-                    $entrada["id"],
+                    $entrada["id_producto"],
                     $entrada["nombre"],
                     $entrada["precio"],
                     $entrada["descripcion"],
                     $entrada["stock"],
-                    $entrada["imagen"],
                     $entrada["membresia"]
                 );
         

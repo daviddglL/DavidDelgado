@@ -13,7 +13,7 @@
 		$tipos = "";
 		
 		if (!is_null($id_producto) && is_numeric($id_producto)) {
-			$condiciones[] = "id = ?";
+			$condiciones[] = "id_producto = ?";
 			$parametros[] = $id_producto;
 			$tipos .= "i"; 
 		}
@@ -35,6 +35,7 @@
 		// Construcción de la consulta SQL
 		$condicion_filtro = !empty($condiciones) ? " WHERE " . implode(" AND ", $condiciones) : "";
 		$consulta = "SELECT * FROM productos " . $condicion_filtro;
+
 	
 		echo "Consulta: " . $consulta . "\n"; 
 	
@@ -68,7 +69,7 @@
 
 	function obtenerProductosPag($conexion, $pagina, $limite) {
 		$offset = ($pagina - 1) * $limite;
-		$consulta = "SELECT id, nombre, precio, descripcion, stock, estado, imagen, membresia FROM productos 
+		$consulta = "SELECT id_producto, nombre, precio, descripcion, stock, estado, imagen, membresia FROM productos 
 					 LIMIT ? OFFSET ?";
 	
 		$sentencia = $conexion->prepare($consulta);
@@ -132,20 +133,20 @@
 		return $salida;
 	}
 
-	function modificarProducto($conexion,$id,$nombre,$precio,$descripcion,$stock,$imagen,$membresia){
+	function modificarProducto($conexion,$id,$nombre,$precio,$descripcion,$stock,$membresia){
 		
 		if(is_integer($id) && 
-		   trim($nombre)!="" && is_float($precio) && trim($descripcion)!="" && is_integer($stock) && trim($imagen)!="" && is_bool($membresia)){
+		   trim($nombre)!="" && is_float($precio) && trim($descripcion)!="" && is_integer($stock) && is_bool($membresia)){
             if ($stock>0){
 				$estado="disponible";
 			}else{
 				$estado="agotado";
 			}
 			$consulta="UPDATE productos 
-			           SET nombre=?,precio=?,descripcion=?,stock=?,estado=?,imagen=?,membresia=?
-		               WHERE id=?";
+			           SET nombre=?,precio=?,descripcion=?,stock=?,estado=?,membresia=?
+		               WHERE id_producto=?";
 			$sentencia=$conexion->prepare($consulta);
-			$sentencia->bind_param("sisissii",$nombre,$precio,$descripcion,$stock,$estado,$imagen,$membresia,$id);
+			$sentencia->bind_param("sisissii",$nombre,$precio,$descripcion,$stock,$estado,$membresia,$id);
 			$sentencia->execute();
 			$salida["http"]=200;
 			$salida["respuesta"]=["mensaje"=>"Modificacion realizada"];
@@ -162,7 +163,7 @@
 	function borrarProducto($conexion,$id){
 
 		if(is_numeric($id)){
-			$consulta="DELETE FROM productos WHERE id=?";
+			$consulta="DELETE FROM productos WHERE id_producto=?";
 			$sentencia=$conexion->prepare($consulta);
 			$sentencia->bind_param("i",$id);
 			$sentencia->execute();
