@@ -8,6 +8,7 @@ header("Content-Type: application/json");
 // Configuración de la base de datos
     require_once "../../connection/config.php";
     require_once "../../connection/funciones.php";
+    require_once 'api_funciones.php';
 
 try {
     $conn = conectar($nombre_host, $nombre_usuario, $password_db, $nombre_db);
@@ -76,26 +77,28 @@ switch ($metodo) {
         
         break;
 
-        case 'PUT':
-            
-            if (isset($entrada["id_producto"], $entrada["nombre"], $entrada["precio"], $entrada["descripcion"], $entrada["stock"], $entrada["membresia"])) {
-                $resultado = modificarProducto(
-                    $conn,
-                    $entrada["id_producto"],
-                    $entrada["nombre"],
-                    $entrada["precio"],
-                    $entrada["descripcion"],
-                    $entrada["stock"],
-                    $entrada["membresia"]
-                );
-        
-                http_response_code($resultado["http"]);
-                echo json_encode($resultado["respuesta"]);
-            } else {
-                http_response_code(400);
-                echo json_encode(["error" => "Faltan parámetros"]);
-            }
-            break;        
+    case 'PUT':
+        // Depuración: imprimir el contenido de $entrada
+        error_log("Contenido de entrada: " . json_encode($entrada));
+
+        if (isset($entrada["id_producto"], $entrada["nombre"], $entrada["precio"], $entrada["descripcion"], $entrada["stock"], $entrada["membresia"])) {
+            $resultado = modificarProducto(
+                $conn,
+                $entrada["id_producto"],
+                $entrada["nombre"],
+                $entrada["precio"],
+                $entrada["descripcion"],
+                $entrada["stock"],
+                $entrada["membresia"]
+            );
+
+            http_response_code($resultado["http"]);
+            echo json_encode($resultado["respuesta"]);
+        } else {
+            http_response_code(400);
+            echo json_encode(["error" => "Faltan parámetros", "entrada" => $entrada]);
+        }
+        break;        
 
     case 'DELETE':
         if(isset($_GET["id"])){

@@ -2,6 +2,12 @@
 require_once 'api_funciones.php';
 require_once "../../connection/config.php";
 require_once "../../connection/funciones.php";
+require_once ("../../php/inicio.php");
+require_once("../noticias/noticias.php");
+require_once("../testimonios/testimonios.php");
+require_once("../servicios/servicios.php");
+require_once("../socios/socios.php");
+
 $apiUrl="http://localhost/DavidDelgado/php/productos/api.php";
 
 global $nombre_db, $nombre_host, $nombre_usuario, $password_db;  
@@ -61,13 +67,14 @@ if (isset($_GET['id_producto'])) {
 
 // Si se envió el formulario
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($entrada["nombre"]) && isset($entrada["precio"]) && isset($entrada["descripcion"]) && isset($entrada["stock"]) && isset($entrada["membresia"])) {
+    if (isset($_POST["id_producto"], $_POST["nombre"], $_POST["precio"], $_POST["descripcion"], $_POST["stock"])) {
         $id_producto = (int) $_POST['id_producto'];
         $nombre_producto = $_POST['nombre'];
         $precio = (float) $_POST['precio'];
         $descripcion = $_POST['descripcion'];
         $stock = (int) $_POST['stock'];
         $membresia = (isset($_POST['membresia']) && $_POST['membresia'] === 'on') ? 1 : 0; // Conversión de checkbox
+
 
         $ch = curl_init();
 
@@ -87,22 +94,132 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'Content-Type: application/json',
         ]);
 
-        $respuesta = json_decode(curl_exec($ch), true);
+        $respuestaJson = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        
-        if ($httpCode == 200) {
-            $mensaje = $respuesta["mensaje"];
+
+        if ($respuestaJson === false) {
+            $error = "Error en cURL: " . curl_error($ch);
+            error_log($error); // Registrar el error en el log
         } else {
-            $error = $respuesta["error"];
+            $respuesta = json_decode($respuestaJson, true);
+            if ($respuesta === null) {
+                $error = "Error al procesar la respuesta de la API. Respuesta recibida: " . $respuestaJson;
+                error_log($error); // Registrar la respuesta recibida
+            } else {
+                // Depuración: imprimir la respuesta de la API
+                error_log("Respuesta de la API: " . print_r($respuesta, true));
+                if ($httpCode == 200) {
+                    echo "
+                    <html>
+                        <head>
+                            <style>
+                                body, html {
+                                    margin: 0;
+                                    padding: 0;
+                                    height: 100%;
+                                    background-color: #1a1c1d;
+                                    color: #aaaebc;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                }
+
+                                .message-container {
+                                    display: flex;
+                                    flex-direction: column;
+                                    justify-content: center;
+                                    align-items: center;
+                                    text-align: center;
+                                    background-color: #2C2C2C;
+                                    padding: 2rem;
+                                    border-radius: 10px;
+                                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+                                    border: 2px solid #F5F5F5;
+                                }
+
+                                .message-container .success {
+                                    color: #D4AF37; /* Color dorado */
+                                    font-size: 1.5rem;
+                                    margin-bottom: 1rem;
+                                    text-shadow: 1px 1px #800020;
+                                }
+
+                                .message-container .redirect {
+                                    color: #F5F5F5;
+                                    font-size: 1rem;
+                                }
+
+                            </style>
+                        </head>
+                        <body>
+                                <div class='message-container'>
+                                    <p class='success'>¡Producto actualizado correctamente!</p>
+                                    <p class='redirect'>Serás redirigido en 3 segundos...</p>
+                                </div>
+                        </body>
+                    </html>";
+                    header("refresh:3; url=productos.php");
+                    exit();
+                } else {
+                    echo "
+                    <html>
+                    <head>
+                        <style>
+                            body, html {
+                            margin: 0;
+                            padding: 0;
+                            height: 100%;
+                            background-color: #1a1c1d;
+                            color: #aaaebc;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+
+                        .message-container {
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
+                            text-align: center;
+                            background-color: #2C2C2C;
+                            padding: 2rem;
+                            border-radius: 10px;
+                            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+                            border: 2px solid #F5F5F5;
+                        }
+
+                        .message-container .error {
+                            color: #D4AF37; /* Color dorado */
+                            font-size: 1.5rem;
+                            margin-bottom: 1rem;
+                            text-shadow: 1px 1px #800020;
+                        }
+
+                        .message-container .redirect {
+                            color: #F5F5F5;
+                            font-size: 1rem;
+                        }
+                        </style>
+                    </head>
+                    <body>
+                        <div class='message-container'>
+                            <p class='error'>Error al actualizar el producto: " . $respuesta["error"] . "</p>
+                            <p class='redirect'>Serás redirigido en 3 segundos...</p>
+                        </div>
+                    </body>
+                    </html>";
+                    header("refresh:3; url=productos.php");
+                    exit();
+                }
+            }
         }
+
+        curl_close($ch);
     } else {
-        $error = "Todos los campos son requeridos.";
-        echo "<pre>";
-print_r($_POST);  // Ver todos los datos enviados desde el formulario
-echo "</pre>";
+        echo "Todos los campos son requeridos.";
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -111,18 +228,25 @@ echo "</pre>";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Producto</title>
+    <link rel="stylesheet" href="../../estilos/styles.css">
+    <script defer src="../../js/formulario_productos.js"></script>
+
 </head>
 
 <body>
+<div class="container">
+    <?php
+        headerr();
+        contactos();
+        echo "<div class='secc'><!--sección central-->";
+    ?>
+    <br><br><br>
+    <div class="formulario">
+        
     <h1>Editar Producto</h1>
 
     <?php
 
-    if (isset($mensaje)) {
-        echo "<p style='color: green;'>" . $mensaje;
-        "</p>";
-        header("Refresh: 3; url=index.php");
-    }
 
     if (isset($error)) {
         echo '<p style="color: red;">' . $error . '</p>';
@@ -130,18 +254,23 @@ echo "</pre>";
 
     if (isset($producto)) {
         ?>
-        <form method="POST">
-            <label for="nombre_producto">Nombre del producto:</label>
-            <input type="text" id="nombre_producto" name="nombre_producto" value="<?php echo htmlspecialchars($producto['nombre']); ?>" >
+
+        <form method="POST" id="formulario">
+            <label for="nombre">Nombre del producto:</label>
+            <input type="text" id="nombre" name="nombre" value="<?php echo htmlspecialchars($producto['nombre']); ?>" >
+            <span class='error'></span>
     
             <label for="precio">Precio:</label>
             <input type="number" id="precio" name="precio" value="<?php echo htmlspecialchars($producto['precio']); ?>€" >
+            <span class='error'></span>
 
             <label for="descripcion">Descripción:</label>
-            <textarea name="descripcion" required><?= htmlspecialchars($producto['descripcion']) ?></textarea><br>
+            <textarea id="descripcion" name="descripcion" required><?= htmlspecialchars($producto['descripcion']) ?></textarea><br>
+            <span class='error'></span>
 
             <label for="stock">stock:</label>
             <input type="number" id="stock" name="stock" value="<?php echo htmlspecialchars($producto['stock']); ?>" >
+            <span class='error'></span>
             
             <label>Membresía:</label>
             <input type="checkbox" name="membresia" <?= $producto['membresia'] ? 'checked' : '' ?>><br>
@@ -150,13 +279,19 @@ echo "</pre>";
             <input type="hidden" id="id_producto" name="id_producto" value="<?php echo htmlspecialchars($producto['id_producto']); ?>">
             <button type="submit">Actualizar</button>
         </form>
+        
         <?php
     } else {
         echo '<p>Producto no encontrado.</p>';
     }
     
     ?>
-
+    </div>
+    <?php
+        echo "</div>";
+        news();
+        footer();        
+    ?>
 
     <a href="./productos.php" style="color:darkgreen">Volver al listado</a>
 </body>

@@ -133,32 +133,44 @@
 		return $salida;
 	}
 
-	function modificarProducto($conexion,$id,$nombre,$precio,$descripcion,$stock,$membresia){
-		
-		if(is_integer($id) && 
-		   trim($nombre)!="" && is_float($precio) && trim($descripcion)!="" && is_integer($stock) && is_bool($membresia)){
-            if ($stock>0){
-				$estado="disponible";
-			}else{
-				$estado="agotado";
-			}
-			$consulta="UPDATE productos 
-			           SET nombre=?,precio=?,descripcion=?,stock=?,estado=?,membresia=?
-		               WHERE id_producto=?";
-			$sentencia=$conexion->prepare($consulta);
-			$sentencia->bind_param("sisissii",$nombre,$precio,$descripcion,$stock,$estado,$membresia,$id);
-			$sentencia->execute();
-			$salida["http"]=200;
-			$salida["respuesta"]=["mensaje"=>"Modificacion realizada"];
+	function modificarProducto($conexion, $id, $nombre, $precio, $descripcion, $stock, $membresia) {
+    // Convertir los datos a los tipos correctos
+    $id = (int) $id;
+    $precio = (float) $precio;
+    $stock = (int) $stock;
+    $membresia = (bool) $membresia;
 
-			$sentencia->close();
-		}else{
-			$salida["http"]=400;
-			$salida["respuesta"]=["error"=>"Error en los datos"];
-		}
+    // Validar los datos
+    if (is_int($id) && 
+        trim($nombre) !== "" && is_float($precio) && trim($descripcion) !== "" && is_int($stock) && is_bool($membresia)) {
+        
+        $estado = ($stock > 0) ? "disponible" : "agotado";
+        
+        $consulta = "UPDATE productos 
+                     SET nombre = ?, precio = ?, descripcion = ?, stock = ?, estado = ?, membresia = ?
+                     WHERE id_producto = ?";
+        $sentencia = $conexion->prepare($consulta);
+        
+        if ($sentencia === false) {
+            return ["http" => 500, "respuesta" => ["error" => "Error en la preparación de la consulta: " . $conexion->error]];
+        }
+        
+        $sentencia->bind_param("sdsisii", $nombre, $precio, $descripcion, $stock, $estado, $membresia, $id);
+        $sentencia->execute();
+        
+        if ($sentencia->affected_rows > 0) {
+            $salida = ["http" => 200, "respuesta" => ["mensaje" => "Modificación realizada"]];
+        } else {
+            $salida = ["http" => 404, "respuesta" => ["error" => "Producto no encontrado o datos no modificados"]];
+        }
+        
+        $sentencia->close();
+    } else {
+        $salida = ["http" => 400, "respuesta" => ["error" => "Error en los datos"]];
+    }
 
-		return $salida;
-	}
+    return $salida;
+}
 
 	function borrarProducto($conexion,$id){
 
