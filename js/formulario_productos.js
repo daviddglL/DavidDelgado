@@ -1,6 +1,7 @@
 "use strict"
 
-let formulario=document.getElementById("formulario");
+let formulario=document.getElementById("form");
+let formModificar = document.getElementById("form-modificar");
 let input_ficheros  = document.getElementById("imagen");
 let nombre = document.getElementById('nombre');
 let precio = document.getElementById('precio');
@@ -35,7 +36,7 @@ stock.addEventListener("input", () => {
 
 formulario.addEventListener("submit", 
   (evento) => {
-  let validaciones = [validarFichero, validarNombre, validarPrecio, validarDescripcion, validarStock];
+  let validaciones = [ validarNombre, validarPrecio, validarDescripcion, validarStock];
   let esValido = true;
   for (let validar of validaciones) {
       if (!validar()) {
@@ -86,17 +87,35 @@ formulario.addEventListener("submit",
 }
 
 
-function validarNombre() {
-    let valor = nombre.value.trim();
-    if (valor === "") {
-        mostrarError(nombre, "El nombre del producto es requerido.");
-        return false;
-    } else {
-        limpiarError(nombre);
-        return true;
-    }
-}
+const validarNombre = () => {
 
+  let valor=nombre.value.trim();
+  let span_error=nombre.nextElementSibling;
+  if (valor === "") {
+    span_error.style.display = "inline";
+    span_error.innerText = "El campo del nombre no puede estar vacío.";
+    return false;
+  }
+
+  else if(!/[A-Za-z]{4,50}/.test(nombre.value.trim())){
+
+    span_error.classList.add("mal");
+    span_error.style.display = "inline";
+    span_error.classList.remove("bien");
+    span_error.innerHTML="tiene que tener entre 4 y 50 caracteres";
+    return false;
+    
+  }else{
+    span_error.classList.remove("mal");
+    span_error.classList.add("bien");
+    span_error.innerText="";
+    span_error.style.display = "none";
+
+  }
+
+  return true;
+
+};
 const validarPrecio=()=>{
 
     let valor_numero =parseInt(precio_servicio.value.trim());

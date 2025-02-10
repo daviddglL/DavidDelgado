@@ -101,8 +101,8 @@ switch ($metodo) {
         break;        
 
     case 'DELETE':
-        if(isset($_GET["id"])){
-            $resultado=borrarProducto($conn,$_GET["id"]);
+        if(isset($_GET["id_producto"])){
+            $resultado=borrarProducto($conn,$_GET["id_producto"]);
             http_response_code($resultado["http"]);
             echo json_encode($resultado["respuesta"]);
         }else{

@@ -66,7 +66,7 @@ if (isset($_GET['id_producto'])) {
 
 
 // Si se envió el formulario
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (isset($_POST['cambios_producto'])) {
     if (isset($_POST["id_producto"], $_POST["nombre"], $_POST["precio"], $_POST["descripcion"], $_POST["stock"])) {
         $id_producto = (int) $_POST['id_producto'];
         $nombre_producto = $_POST['nombre'];
@@ -138,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 }
 
                                 .message-container .success {
-                                    color: #D4AF37; /* Color dorado */
+                                    color: #D4AF37; 
                                     font-size: 1.5rem;
                                     margin-bottom: 1rem;
                                     text-shadow: 1px 1px #800020;
@@ -190,7 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
 
                         .message-container .error {
-                            color: #D4AF37; /* Color dorado */
+                            color: #D4AF37;
                             font-size: 1.5rem;
                             margin-bottom: 1rem;
                             text-shadow: 1px 1px #800020;
@@ -254,31 +254,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($producto)) {
         ?>
+        
+            <form  id='form-modificar' method='POST'  enctype='multipart/form-data'>
+                <label for="nombre">Nombre del producto:</label>
+                <input type="text" id="nombre" name="nombre" value="<?php echo htmlspecialchars($producto['nombre']); ?>" >
+                <span class='error'></span>
+        
+                <label for="precio">Precio:</label>
+                <input type="number" id="precio" name="precio" value="<?php echo htmlspecialchars($producto['precio']); ?>€" >
+                <span class='error'></span>
 
-        <form method="POST" id="formulario">
-            <label for="nombre">Nombre del producto:</label>
-            <input type="text" id="nombre" name="nombre" value="<?php echo htmlspecialchars($producto['nombre']); ?>" >
-            <span class='error'></span>
-    
-            <label for="precio">Precio:</label>
-            <input type="number" id="precio" name="precio" value="<?php echo htmlspecialchars($producto['precio']); ?>€" >
-            <span class='error'></span>
+                <label for="descripcion">Descripción:</label>
+                <textarea id="descripcion" name="descripcion" required><?= htmlspecialchars($producto['descripcion']) ?></textarea><br>
+                <span class='error'></span>
 
-            <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" name="descripcion" required><?= htmlspecialchars($producto['descripcion']) ?></textarea><br>
-            <span class='error'></span>
+                <label for="stock">stock:</label>
+                <input type="number" id="stock" name="stock" value="<?php echo htmlspecialchars($producto['stock']); ?>" >
+                <span class='error'></span>
+                
+                <label>Membresía:</label>
+                <input type="checkbox" name="membresia" <?= $producto['membresia'] ? 'checked' : '' ?>><br>
 
-            <label for="stock">stock:</label>
-            <input type="number" id="stock" name="stock" value="<?php echo htmlspecialchars($producto['stock']); ?>" >
-            <span class='error'></span>
-            
-            <label>Membresía:</label>
-            <input type="checkbox" name="membresia" <?= $producto['membresia'] ? 'checked' : '' ?>><br>
-
-            
-            <input type="hidden" id="id_producto" name="id_producto" value="<?php echo htmlspecialchars($producto['id_producto']); ?>">
-            <button type="submit">Actualizar</button>
-        </form>
+                
+                <input type="hidden" id="id_producto" name="id_producto" value="<?php echo htmlspecialchars($producto['id_producto']); ?>">
+                <button type="submit" name='cambios_producto'>Actualizar</button>
+            </form>
         
         <?php
     } else {
