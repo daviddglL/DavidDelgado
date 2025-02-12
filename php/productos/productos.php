@@ -41,7 +41,7 @@ require_once("../noticias/noticias.php");
             <div class="cart-items"></div>
             <footer>
                 <h3 class="cart-total">Total: <span class="total-price"></span></h3>
-                <button class="button cart-checkout btn">Tramitar pedido</button>
+                <button class="button cart-checkout ">Tramitar pedido</button>
             </footer>  
         </aside>
     </div>
@@ -50,7 +50,7 @@ require_once("../noticias/noticias.php");
         <?php
             headerr();
             echo "<div class='toggle-container'>
-                    <button class='button toggle-cart btn'>
+                    <button class='button toggle-cart '>
                         <i class='fas fa-shopping-cart '></i>
                     </button>
                   </div>";

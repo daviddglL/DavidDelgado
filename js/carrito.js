@@ -66,13 +66,15 @@ function crearItemCarrito(datos_item) {
 
 function mostrarMensaje(texto, clase) {
   alerta.innerHTML = `<h3>${texto}</h3>`;
-
   alerta.classList.add(clase);
+  alerta.style.display = "block"; // Asegúrate de que el mensaje sea visible
+
   // remove alert
   setTimeout(() => {
     alerta.innerText = "";
     alerta.classList.remove(clase);
-  }, 2000);
+    alerta.style.display = "none"; // Oculta el mensaje después de 2 segundos
+  }, 35000);
 }
 
 function calcularTotal() {
@@ -93,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
         carrito_productos.appendChild(nuevo_elemento);
         localStorage.setItem(carrito_local, JSON.stringify(lista_carrito));
         calcularTotal();
-        mostrarMensaje("Producto añadido al carrito", "success");
+        mostrarMensaje("Producto añadido", "success"); // Añadir mensaje aquí
       }
     });
   });
