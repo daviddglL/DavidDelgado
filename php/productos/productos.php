@@ -23,18 +23,41 @@ require_once("../noticias/noticias.php");
     <!-- styles css -->
     <link rel="stylesheet" href="../../estilos/styles.css">
     <script defer src="../../js/carrito.js"></script>
+    <script type="text/javascript" src="lista_productos.js"></script>
 </head>
 
 <body>
     <!-- cart -->
+    <div class="cart-overlay">
+        <aside class="cart">
+            <button class="cart-close">
+                <i class="fas fa-times"></i>
+            </button>
+            <header>
+                <button class="button cart-checkout btn">Vaciar carro</button>
+                <h3 class="text-slanted">Añadido hasta ahora</h3>
+            </header>
+            <!-- cart items -->
+            <div class="cart-items"></div>
+            <footer>
+                <h3 class="cart-total">Total: <span class="total-price"></span></h3>
+                <button class="button cart-checkout btn">Tramitar pedido</button>
+            </footer>  
+        </aside>
+    </div>
+
     <div class="container">
         <?php
             headerr();
+            echo "<div class='toggle-container'>
+                    <button class='button toggle-cart btn'>
+                        <i class='fas fa-shopping-cart '></i>
+                    </button>
+                  </div>";
             contactos();
             echo "<div class='secc'><!--sección central-->";
             echo "<h1>Listado de Productos</h1>";
         ?>
-        
         <div class="search-container">
             <h2>Buscar Producto</h2>
             <form method="GET" action="api.php" class="socios_form">
@@ -42,22 +65,6 @@ require_once("../noticias/noticias.php");
                 <button type="submit" name="busqueda">Buscar</button>
             </form>  
         </div>
-        <div class="cart-overlay">
-        <aside class="cart">
-            <button class="cart-close">
-                <i class="fas fa-times"></i>
-            </button>
-            <header>
-                <button class="cart-checkout btn">Vaciar carro</button>
-                <h3 class="text-slanted">Añadido hasta ahora</h3>
-            </header>
-            <!-- cart items -->
-            <div class="cart-items"></div>
-            <footer>
-                <button class="cart-checkout btn">Tramitar pedido</button>
-            </footer>  
-        </aside>
-    </div>
 
         <?php
             $ch = curl_init();

@@ -6,6 +6,7 @@ const cerrar_carrito = document.querySelector(".cart-close");
 const carrito_aside = document.querySelector("aside.cart");
 const carrito_productos = document.querySelector(".cart-items");
 const abrir_carrito = document.querySelector(".toggle-cart");
+const total_price_span = document.querySelector(".total-price");
 
 document.addEventListener("click", () => {
   carrito.classList.remove("show");
@@ -31,6 +32,7 @@ let lista_carrito = JSON.parse(localStorage.getItem(carrito_local)) ?? [];
 for (let item of lista_carrito) {
   carrito_productos.appendChild(crearItemCarrito(item));
 }
+calcularTotal();
 
 //==================FUNCIONES AUXILIARES=====================================================
 
@@ -45,9 +47,9 @@ function crearItemCarrito(datos_item) {
             alt="${datos_item.nombre}"
           />  
           <div>
-            <h4 class="cart-item-name">${datos_item.nombre}</h4>
-            <p class="cart-item-price">${datos_item.precio} €</p>
-            <button class="cart-item-remove-btn" data-id="${datos_item.id_producto}">Eliminar <i class="fas fa-times"></i></button>
+            <h4 class="cart-item-name" style='color: #D4AF37'>${datos_item.nombre}</h4>
+            <p class="cart-item-price" style='color: #D4AF37'>${datos_item.precio} €</p>
+            <button class="button cart-item-remove-btn" style='color: #D4AF37' data-id="${datos_item.id_producto}">Eliminar <i class="fas fa-times"></i></button>
           </div>`;
 
   const eliminar = nuevo_item.querySelector(".cart-item-remove-btn");
@@ -56,6 +58,7 @@ function crearItemCarrito(datos_item) {
     lista_carrito.splice(posicion, 1);
     localStorage.setItem(carrito_local, JSON.stringify(lista_carrito));
     nuevo_item.remove();
+    calcularTotal();
   });
 
   return nuevo_item;
@@ -72,6 +75,11 @@ function mostrarMensaje(texto, clase) {
   }, 2000);
 }
 
+function calcularTotal() {
+  const total = lista_carrito.reduce((acc, item) => acc + item.precio, 0);
+  total_price_span.textContent = `${total.toFixed(2)} €`;
+}
+
 // NUEVO: Añadir productos al carrito desde productos.php
 document.addEventListener("DOMContentLoaded", () => {
   const botonesComprar = document.querySelectorAll(".comprar-btn");
@@ -84,6 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const nuevo_elemento = crearItemCarrito(producto);
         carrito_productos.appendChild(nuevo_elemento);
         localStorage.setItem(carrito_local, JSON.stringify(lista_carrito));
+        calcularTotal();
         mostrarMensaje("Producto añadido al carrito", "success");
       }
     });
