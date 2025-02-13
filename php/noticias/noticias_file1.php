@@ -35,6 +35,17 @@
 if (isset($_GET['id'])) {
     $id_noticia = (int)$_GET['id']; 
 
+    /**
+     * @param int $id_noticia
+     * @return array|false
+     * @throws Exception
+     * @throws mysqli_sql_exception
+     * @function obtenerNoticiaPorId($id_noticia)
+     * @description Obtiene una noticia por su ID
+     * @example obtenerNoticiaPorId(1)
+     * 
+     */
+
    obtenerNoticiaPorId($id_noticia);
 
     $noticia = obtenerNoticiaPorId($id_noticia);

@@ -36,9 +36,15 @@ calcularTotal();
 
 //==================FUNCIONES AUXILIARES=====================================================
 
+/**
+ * Description placeholder
+ *
+ * @param {*} datos_item 
+ * @returns {*} 
+ */
 function crearItemCarrito(datos_item) {
   const nuevo_item = document.createElement("article");
-
+  
   nuevo_item.classList.add("cart-item");
   nuevo_item.setAttribute("data-id", datos_item.id_producto);
   nuevo_item.innerHTML = `
@@ -52,6 +58,12 @@ function crearItemCarrito(datos_item) {
             <button class="button cart-item-remove-btn" style='color: #D4AF37' data-id="${datos_item.id_producto}">Eliminar <i class="fas fa-times"></i></button>
           </div>`;
 
+          
+  /**
+   * Description placeholder
+   *
+   * @type {*}
+   */
   const eliminar = nuevo_item.querySelector(".cart-item-remove-btn");
   eliminar.addEventListener("click", () => {
     const posicion = lista_carrito.findIndex((item) => item["id_producto"] == datos_item.id_producto);
@@ -64,11 +76,17 @@ function crearItemCarrito(datos_item) {
   return nuevo_item;
 }
 
+/**
+ * Description placeholder
+ *
+ * @param {*} texto 
+ * @param {*} clase 
+ */
 function mostrarMensaje(texto, clase) {
   alerta.innerHTML = `<h3>${texto}</h3>`;
   alerta.classList.add(clase);
   alerta.style.display = "block"; // Asegúrate de que el mensaje sea visible
-
+  
   // remove alert
   setTimeout(() => {
     alerta.innerText = "";

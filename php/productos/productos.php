@@ -67,6 +67,17 @@ require_once("../noticias/noticias.php");
         </div>
 
         <?php
+            /**
+             * respuesta de la Api
+             * @var mixed $apiUrl
+             * @var mixed $ch
+             * @var mixed $respuesta
+             * @var mixed $httpCode
+             * @var mixed $productos
+             * @var mixed $producto
+             * @var mixed $i
+             * 
+             */
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $apiUrl);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -92,7 +103,11 @@ require_once("../noticias/noticias.php");
                 $limite = $paginacion['limite'];
 
                 echo "<div class='cards-container' id='cards-container'>";
-
+                /**
+                 * 
+                 * Aquí se muestra el listado de productos
+                 *
+                 */
                 foreach ($productos as $producto) {
                     echo "<div class='card'>";
                     echo "<h3 class='titulo'>{$producto['nombre']}</h3>";
@@ -129,6 +144,17 @@ require_once("../noticias/noticias.php");
                 }
             
                 // Enlace a la siguiente página (si no estamos en la última)
+                /**
+                 * 
+                 * paginación
+                 * @var mixed $page
+                 * @var mixed $limit
+                 * @var mixed $total
+                 * @var mixed $paginacion
+                 * @var mixed $productos
+                 * @var mixed $respuesta
+                 * 
+                 */
                 if ($actual < $total) {
                     echo '<a class="paginacion" href="?page=' . ($actual + 1) . '&limit=' . $limite . '">Siguiente</a>';
                 }
