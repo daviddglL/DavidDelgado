@@ -2,8 +2,9 @@
 
 // Configuración de la API con parámetros de paginación
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
-$limit = isset($_GET['limit']) && is_numeric($_GET['limit']) ? (int)$_GET['limit'] : 10;
-$apiUrl = "http://localhost/DavidDelgado/php/productos/api.php?page=$page&limit=$limit"; // Cambia esta URL al endpoint correcto
+$limit = isset($_GET['limit']) && is_numeric($_GET['limit']) ? (int)$_GET['limit'] : 4;
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+$apiUrl = "http://localhost/DavidDelgado/php/productos/api.php?page=$page&limit=$limit&search=" . urlencode($search);
 
 require_once "../../connection/config.php";
 require_once "../../connection/funciones.php";
@@ -30,16 +31,16 @@ require_once("../noticias/noticias.php");
     <!-- cart -->
     <div class="cart-overlay">
         <aside class="cart">
-            <button class="cart-close">
+            <button class="button cart-close">
                 <i class="fas fa-times"></i>
             </button>
             <header>
-                <button class="button cart-checkout btn">Vaciar carro</button>
                 <h3 class="text-slanted">Añadido hasta ahora</h3>
             </header>
             <!-- cart items -->
             <div class="cart-items"></div>
             <footer>
+                <button class="button cart-checkout ">Vaciar carro</button>
                 <h3 class="cart-total">Total: <span class="total-price"></span></h3>
                 <button class="button cart-checkout ">Tramitar pedido</button>
             </footer>  
@@ -60,24 +61,13 @@ require_once("../noticias/noticias.php");
         ?>
         <div class="search-container">
             <h2>Buscar Producto</h2>
-            <form method="GET" action="api.php" class="socios_form">
-                <input class="search_placeholder" type="text" name="search" placeholder="Nombre del producto, precio">
+            <form method="GET" action="productos.php" class="socios_form">
+                <input class="search_placeholder" type="text" name="search" placeholder="Nombre del producto, precio" value="<?php echo htmlspecialchars($search); ?>">
                 <button type="submit" name="busqueda">Buscar</button>
             </form>  
         </div>
 
         <?php
-            /**
-             * respuesta de la Api
-             * @var mixed $apiUrl
-             * @var mixed $ch
-             * @var mixed $respuesta
-             * @var mixed $httpCode
-             * @var mixed $productos
-             * @var mixed $producto
-             * @var mixed $i
-             * 
-             */
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $apiUrl);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -99,15 +89,11 @@ require_once("../noticias/noticias.php");
                 $productos = $respuesta["datos"];
                 $paginacion = $respuesta["paginacion"];
                 $actual = $paginacion['actual'];
-                $total = $paginacion['paginas'];
+                $total = $paginacion['total'];
                 $limite = $paginacion['limite'];
 
                 echo "<div class='cards-container' id='cards-container'>";
-                /**
-                 * 
-                 * Aquí se muestra el listado de productos
-                 *
-                 */
+
                 foreach ($productos as $producto) {
                     echo "<div class='card'>";
                     echo "<h3 class='titulo'>{$producto['nombre']}</h3>";
@@ -129,34 +115,20 @@ require_once("../noticias/noticias.php");
             
                 echo '<div class="pagination">';
             
-                // Enlace a la página anterior (si no estamos en la primera)
                 if ($actual > 1) {
-                    echo '<a class="paginacion" href="?page=' . ($actual - 1) . '&limit=' . $limite . '">Anterior</a>';
+                    echo '<a class="paginacion" href="?page=' . ($actual - 1) . '&limit=' . $limite . '&search=' . urlencode($search) . '">Anterior</a>';
                 }
             
-                // Enlaces a las páginas
                 for ($i = 1; $i <= $total; $i++) {
                     if ($i == $actual) {
                         echo '<span class="current">' . $i . '</span>';
                     } else {
-                        echo '<a class="paginacion" href="?page=' . $i . '&limit=' . $limite . '">' . $i . '</a>';
+                        echo '<a class="paginacion" href="?page=' . $i . '&limit=' . $limite . '&search=' . urlencode($search) . '">' . $i . '</a>';
                     }
                 }
             
-                // Enlace a la siguiente página (si no estamos en la última)
-                /**
-                 * 
-                 * paginación
-                 * @var mixed $page
-                 * @var mixed $limit
-                 * @var mixed $total
-                 * @var mixed $paginacion
-                 * @var mixed $productos
-                 * @var mixed $respuesta
-                 * 
-                 */
                 if ($actual < $total) {
-                    echo '<a class="paginacion" href="?page=' . ($actual + 1) . '&limit=' . $limite . '">Siguiente</a>';
+                    echo '<a class="paginacion" href="?page=' . ($actual + 1) . '&limit=' . $limite . '&search=' . urlencode($search) . '">Siguiente</a>';
                 }
             
                 echo '</div>';

@@ -6,65 +6,33 @@
 
     $conexion = conectar($nombre_host, $nombre_usuario, $password_db, $nombre_db);
 
-	function obtenerProductos($conexion, $id_producto = null, $nombre = null, $precio = null) {
+	function obtenerProductos($conn, $search = '', $page = 1, $limit = 4) {
+		$offset = ($page - 1) * $limit;
+		$search = "%$search%";
 		
-		$condiciones = [];
-		$parametros = [];
-		$tipos = "";
+		$stmt = $conn->prepare("SELECT SQL_CALC_FOUND_ROWS * FROM productos WHERE nombre LIKE ? OR descripcion LIKE ? LIMIT ?, ?");
+		$stmt->bind_param("ssii", $search, $search, $offset, $limit);
+		$stmt->execute();
+		$result = $stmt->get_result();
 		
-		if (!is_null($id_producto) && is_numeric($id_producto)) {
-			$condiciones[] = "id_producto = ?";
-			$parametros[] = $id_producto;
-			$tipos .= "i"; 
+		$productos = [];
+		while ($row = $result->fetch_assoc()) {
+			$productos[] = $row;
 		}
 		
-		if (!is_null($nombre) && $nombre !== "") {
-			$condiciones[] = "nombre LIKE ?";
-			$parametros[] = "%$nombre%"; 
-			$tipos .= "s"; 
-		}
+		$result_total = $conn->query("SELECT FOUND_ROWS() as total");
+		$total = $result_total->fetch_assoc()['total'];
 		
-
-		if (!is_null($precio) && is_numeric($precio)) {
-			$condiciones[] = "precio BETWEEN ? AND ?";
-			$parametros[] = $precio - 0.01; 
-			$parametros[] = $precio + 0.01; 
-			$tipos .= "dd"; 
-		}
-	
-		// Construcción de la consulta SQL
-		$condicion_filtro = !empty($condiciones) ? " WHERE " . implode(" AND ", $condiciones) : "";
-		$consulta = "SELECT * FROM productos " . $condicion_filtro;
-
-	
-		echo "Consulta: " . $consulta . "\n"; 
-	
-		$sentencia = $conexion->prepare($consulta);
+		$paginacion = [
+			'actual' => $page,
+			'total' => ceil($total / $limit),
+			'limite' => $limit
+		];
 		
-		if (!$sentencia) {
-			return ["http" => 500, "respuesta" => ["error" => "Error en la consulta: " . $conexion->error]];
-		}
-		
-		if (!empty($parametros)) {
-			$sentencia->bind_param($tipos, ...$parametros);
-		}
-		
-		// Ejecutar la consulta
-		$sentencia->execute();
-		$resultado = $sentencia->get_result();
-		
-		if ($resultado->num_rows > 0) {
-			$productos = [];
-			while ($fila = $resultado->fetch_assoc()) {
-				$productos[] = $fila;
-			}
-			$salida = ["http" => 200, "respuesta" => ["datos" => $productos]];
-		} else {
-			$salida = ["http" => 404, "respuesta" => ["error" => "No se encontraron productos"]];
-		}
-		
-		$sentencia->close();
-		return $salida;
+		return [
+			'datos' => $productos,
+			'paginacion' => $paginacion
+		];
 	}
 
 	function obtenerProductosPag($conexion, $pagina, $limite) {

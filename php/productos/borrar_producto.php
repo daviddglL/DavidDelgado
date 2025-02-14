@@ -129,3 +129,8 @@ if (isset($_GET['id_producto'])) {
 } else {
     echo "ID no indicado para eliminar.";
 }
+
+
+
+?>
+
