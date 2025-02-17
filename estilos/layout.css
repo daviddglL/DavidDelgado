@@ -23,7 +23,7 @@
   margin: 0;
   overflow-y: auto;       
   max-height: 123vh; 
-  box-sizing: border-box;
+
   -ms-overflow-style: none;
 }
 .secc::-webkit-scrollbar {
