@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $nuevo_hash = password_hash($password, PASSWORD_DEFAULT);
 
-            $update_stmt = $conexion->prepare("UPDATE socios SET contrasena = ? WHERE username = ?");
+            $update_stmt = $conexion->prepare("UPDATE socio SET contrasena = ? WHERE usuario = ?");
             $update_stmt->bind_param("ss", $nuevo_hash, $login);
             $update_stmt->execute();
 
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (password_verify($password, $hashed_password)) {
             $_SESSION["nombre"] = $usuario["nombre"];
             $_SESSION["tipo"] = $usuario["tipo"];
-            header("Location: index.php");
+            header("Location: ../DavidDelgado/index.php");
             exit();
 
         } else {
