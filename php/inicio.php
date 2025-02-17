@@ -81,8 +81,17 @@ function headerr(){
                     <span class='border border-bottom'></span>
                     <span class='border border-left'></span>
         </a>";
-echo "</li>";
+    echo "</li>";
 
+    echo "<li>";
+    echo "<a href='/DavidDelgado/php/users/usuarios.php'>
+                    Usuarios
+                    <span class='border border-top'></span>
+                    <span class='border border-right'></span>
+                    <span class='border border-bottom'></span>
+                    <span class='border border-left'></span>
+        </a>";
+    echo "</li>";
         
     echo "</ul>";
     echo "</div>";

@@ -9,12 +9,13 @@ DROP TABLE IF EXISTS socio;
 
 -- Creating 'socio' table
 CREATE TABLE socio (
-    id_socio INT AUTO_INCREMENT PRIMARY KEY,
+    id_socio INT NULL AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     edad INT NOT NULL,
     contrasena VARCHAR(255) NOT NULL,
     usuario VARCHAR(50) UNIQUE NOT NULL,
     telefono VARCHAR(15) NOT NULL,
+    role ENUM('admin', 'user') NOT NULL DEFAULT 'user',
     foto VARCHAR(255)
 );
 
@@ -70,38 +71,21 @@ CREATE TABLE citas (
     FOREIGN KEY (codigo_servicio) REFERENCES servicio(codigo_servicio)
 );
 
-CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    role ENUM('admin', 'user') NOT NULL DEFAULT 'user',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+ALTER TABLE socio MODIFY id_socio INT NOT NULL; -- Evitar que sea NULL
+INSERT INTO socio (id_socio, nombre, edad, contrasena, usuario, telefono, role, foto) 
+VALUES (0, 'Admin', 0, 'admin', 'admin', '', 'admin', 'admin'); 
 
-CREATE TABLE api_keys (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    api_key VARCHAR(64) NOT NULL UNIQUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
-
-
-INSERT INTO users (nombre, email, password, role) VALUES
-('Admin', 'admin@example.com', SHA2('adminpassword', 256), 'admin'),
-('Usuario1', 'user1@example.com', SHA2('userpassword', 256), 'user');
-
-
+ALTER TABLE socio MODIFY id_socio INT AUTO_INCREMENT; -- Volver a activar AUTO_INCREMENT
+ALTER TABLE socio AUTO_INCREMENT = 1; -- Evitar que los siguientes valores sean 0
 
 -- Inserting sample data into 'socio' table
-INSERT INTO socio (nombre, edad, contrasena, usuario, telefono, foto) VALUES
-('Anonimo', 100, 'contraseña1234', 'anonimo', '159753486', 'anonimo'),
-('Carlos Perez', 30, 'password123', 'cperez', '123456789', 'hombre1'),
-('Ana Lopez', 25, 'securepass', 'alopez', '987654321', 'mujer1'),
-('Luis Gomez', 28, 'mypassword', 'lgomez', '456123789', 'hombre2'),
-('Mariana Torres', 32, 'password456', 'mtorres', '159753486', 'mujer2'),
-('Javier Morales', 22, 'pass789', 'jmorales', '753951486', 'hombre3');
+INSERT INTO socio (nombre, edad, contrasena, usuario, telefono, role, foto) VALUES
+('Anonimo', 100, 'contraseña1234', 'anonimo', '159753486', 'user', 'anonimo'),
+('Carlos Perez', 30, 'password123', 'cperez', '123456789', 'user', 'hombre1'),
+('Ana Lopez', 25, 'securepass', 'alopez', '987654321', 'user', 'mujer1'),
+('Luis Gomez', 28, 'mypassword', 'lgomez', '456123789', 'user', 'hombre2'),
+('Mariana Torres', 32, 'password456', 'mtorres', '159753486', 'user', 'mujer2'),
+('Javier Morales', 22, 'pass789', 'jmorales', '753951486', 'user', 'hombre3');
 
 -- Inserting sample data into 'servicio' table
 INSERT INTO servicio (descripcion, duracion_servicio, precio_servicio) VALUES
