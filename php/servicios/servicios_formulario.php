@@ -8,7 +8,7 @@
     require_once("../testimonios/testimonios.php");
     require_once("../servicios/servicios.php");
     require_once("../socios/socios.php");
-   
+
 ?>
 
 <!DOCTYPE html>

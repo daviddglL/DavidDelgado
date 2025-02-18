@@ -10,7 +10,7 @@ require_once "../../connection/config.php";
 require_once "../../connection/funciones.php";
 require_once ("../../php/inicio.php");
 require_once("../noticias/noticias.php");
-
+session_start();
 ?>
 
 <!DOCTYPE html>

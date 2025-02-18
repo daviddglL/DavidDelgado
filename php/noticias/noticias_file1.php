@@ -6,7 +6,7 @@
     require_once("../noticias/noticias.php");
     require_once("../servicios/servicios.php");
     require_once("../socios/socios.php");
-
+    session_start();
 
    
 ?>

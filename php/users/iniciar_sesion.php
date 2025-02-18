@@ -1,50 +1,36 @@
 <?php
 session_start();
-require_once "../../connection/config.php";
-require_once "../../connection/funciones.php";
+
+require_once __DIR__ . "/../../connection/config.php";
+require_once __DIR__ . "/../../connection/funciones.php";
 $conexion = conectar($nombre_host, $nombre_usuario, $password_db, $nombre_db);
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
 
-   
-    $stmt = $conexion->prepare("SELECT id_socio, contrasena, role FROM socio WHERE usuario = ?");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $resultado = $stmt->get_result();
+$username = $_POST['username'];
+$password = $_POST['password'];
 
-    if ($resultado->num_rows == 1) {
-        $usuario = $resultado->fetch_assoc();
-        $hashed_password = trim($usuario["contrasena"]);
-        if ($hashed_password === $password) { 
+$stmt = $conexion->prepare("SELECT id_socio, contrasena, role, nombre FROM socio WHERE usuario = ?");
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$resultado = $stmt->get_result();
 
-            $nuevo_hash = password_hash($password, PASSWORD_DEFAULT);
+if ($resultado->num_rows == 1) {
+    $usuario = $resultado->fetch_assoc();
+    $hashed_password = trim($usuario["contrasena"]);
 
-            $update_stmt = $conexion->prepare("UPDATE socio SET contrasena = ? WHERE usuario = ?");
-            $update_stmt->bind_param("ss", $nuevo_hash, $login);
-            $update_stmt->execute();
-
-            $hashed_password = $nuevo_hash;
-            $update_stmt->close();
-        }
-
-        if (password_verify($password, $hashed_password)) {
-            $_SESSION["nombre"] = $usuario["nombre"];
-            $_SESSION["tipo"] = $usuario["tipo"];
-            header("Location: ../DavidDelgado/index.php");
-            exit();
-
-        } else {
-            echo "Contraseña incorrecta.";
-        }
-
+    if (password_verify($password, $hashed_password)) {
+        $_SESSION["id_socio"] = $usuario["id_socio"];
+        $_SESSION["nombre"] = $usuario["nombre"];
+        $_SESSION["role"] = $usuario["role"];
+        $_SESSION["username"] = $username; // Añadir esta línea
+        header("Location: " . BASE_URL . "/php/users/usuarios.php"); // Redirigir a la página principal
+        exit();
     } else {
-        echo "Usuario no encontrado.";
+        echo "Contraseña incorrecta.";
     }
-    $stmt->close();
-    $conexion->close();
 } else {
-    header("Location: login.php");
-    exit();
+    echo "Usuario no encontrado.";
 }
+$stmt->close();
+$conexion->close();
+
 ?>

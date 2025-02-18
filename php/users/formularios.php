@@ -1,7 +1,7 @@
 <?php
-require_once "../../connection/config.php";
-require_once "../../connection/funciones.php";
-
+require_once __DIR__ . "/../../connection/config.php";
+require_once __DIR__ . "/../../connection/funciones.php";
+require_once __DIR__ . "/../users/iniciar_sesion.php";
 function formulario_para_iniciar_sesion($pagina_actual){
     return "<div class='login-container'>
                 <form class='login-form' action='iniciar_sesion.php' method='POST'>
