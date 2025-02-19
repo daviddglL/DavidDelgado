@@ -40,14 +40,14 @@
   .toggle-container {
     position: fixed;
     margin-top: 110px;
-    margin-left: 200px;
+    margin-left: 140px;
     z-index: 1000;
     
   }
   .toggle-cart {
     background: transparent;
     border-color: transparent;
-    font-size: 3.6rem;
+    font-size: 3rem;
     color: #D4AF37;
     cursor: pointer;
     

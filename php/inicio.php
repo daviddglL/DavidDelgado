@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 require_once __DIR__ . "/../connection/config.php";
 require_once __DIR__ . "/../connection/funciones.php";
 require_once __DIR__ . "/users/formularios.php";
@@ -88,24 +88,29 @@ function headerr(){
     echo "</li>";
 
     echo "<li>";
-    echo "<a href='" . BASE_URL . "php/users/usuarios.php'>
-                    <button class='button toggle-cart '>
-                        <i class='fa-solid fa-user'></i>
-                    </button>
-        </a>";
-        if (isset($_SESSION['username'])) {
-            echo "<a href='" . BASE_URL . "php/users/cerrar_sesion.php'>
-                    Cerrar Sesión
-                    <span class='border border-top'></span>
-                    <span class='border border-right'></span>
-                    <span class='border border-bottom'></span>
-                    <span class='border border-left'></span>
-                </a>";
-        }
+    echo   confirmar_sesion();
+
     echo "</li>";
         
     echo "</ul>";
     echo "</div>";
+}
+
+function confirmar_sesion(){
+    if (isset($_SESSION['username'])) {
+        echo "<a class='exit' href='" . BASE_URL . "php/users/cerrar_sesion.php'>
+                <span class='username'>usuario: " . $_SESSION['username'] . "</span>
+                <img class='exit-icon' src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAwklEQVR4nO2WQQrCMBBFcwlFzyH2W+kBrEctdOYObgQVETOte3uQSuha27RNsjAfZpOQeeTzJ0SpqBCqGEdhNMJoR1ZTEXJrsEyDdkV4jwG3c1QE9ypaLTOESxNOwrg9ynTp1WphXMyaZuivcBfge5EthJJnt5e86nKz9hauXviQpprT/Y/BGNaHcLW/MSELA+bpVkuxXTkH90JdgY2tXTY8j5NmnIM8IIMkEcx/YHUT5LNXEXJzcApUyt3BGhylHOoD09/mmVfEjvUAAAAASUVORK5CYII=' alt='exit'>
+              </a>";
+    } else {
+        echo "<a href='" . BASE_URL . "php/users/usuarios.php'>
+                usuarios
+                    <span class='border border-top'></span>
+                    <span class='border border-right'></span>
+                    <span class='border border-bottom'></span>
+                    <span class='border border-left'></span>
+             </a>";
+    }
 }
 
 function contactos(){

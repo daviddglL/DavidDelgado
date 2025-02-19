@@ -4,13 +4,14 @@ require_once __DIR__ . "/../../connection/funciones.php";
 require_once __DIR__ . "/../users/iniciar_sesion.php";
 function formulario_para_iniciar_sesion($pagina_actual){
     return "<div class='login-container'>
-                <form class='login-form' action='iniciar_sesion.php' method='POST'>
-                    <label for='username'>Usuario:</label>
-                    <input type='text' id='username' name='username' placeholder='Introduce tu usuario' required>
-                    <label for='password'>Contraseña:</label>
-                    <input type='password' id='password' name='password' placeholder='Introduce tu contraseña' required>
-                    <input type='hidden' id='origen' name='origen' value='$pagina_actual'>
-                    <button type='submit'>Iniciar sesión</button>
+                <form method='POST' action='iniciar_sesion.php'>
+                    <label for='usuario'>Usuario:</label>
+                    <input type='text' id='usuario' name='usuario' required>
+                    <br>
+                    <label for='contrasena'>Contraseña:</label>
+                    <input type='password' id='contrasena' name='contrasena' required>
+                    <br>
+                    <input type='submit' value='Iniciar Sesión'>
                 </form>
             </div>";
 }

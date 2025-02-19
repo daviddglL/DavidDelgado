@@ -106,3 +106,19 @@
     align-items: center;
 
   }
+
+
+.exit {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.exit .username {
+    margin-right: 10px; /* Espacio entre el texto y la imagen */
+}
+
+.exit .exit-icon {
+    width: 20px; /* Ajusta el tamaño de la imagen según sea necesario */
+    height: 20px;
+}

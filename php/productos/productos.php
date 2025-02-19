@@ -10,7 +10,7 @@ require_once "../../connection/config.php";
 require_once "../../connection/funciones.php";
 require_once ("../../php/inicio.php");
 require_once("../noticias/noticias.php");
-session_start();
+
 ?>
 
 <!DOCTYPE html>
@@ -57,7 +57,6 @@ session_start();
                   </div>";
             contactos();
             echo "<div class='secc'><!--sección central-->";
-            echo "<h1>Listado de Productos</h1>";
         ?>
         <div class="search-container">
             <h2>Buscar Producto</h2>

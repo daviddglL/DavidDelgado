@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 require_once __DIR__ . "/../../connection/config.php";
 require_once __DIR__ . "/../../connection/funciones.php";
 require_once __DIR__ . "/../users/formularios.php";

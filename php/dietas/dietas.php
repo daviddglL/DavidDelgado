@@ -4,7 +4,7 @@
     require_once "../../connection/funciones.php";
     require_once ("../../php/inicio.php");
     require_once("../noticias/noticias.php");
-    session_start();
+
 ?>
 
 <!DOCTYPE html>
@@ -26,8 +26,9 @@
           echo "<div class='secc'><!--sección central-->";
           
       ?>  
-      <h1>Buscador de Recetas Saludables</h1>
+
       <div class="formulario">
+      <h1>Buscador de Recetas Saludables</h1>
       <form id="searchForm">
         <label for="query">Buscar receta:</label>
         <input type="text" id="query" name="query" placeholder="Ejemplo: pollo, aguacate" required>
