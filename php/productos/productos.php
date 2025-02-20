@@ -102,9 +102,15 @@ require_once("../noticias/noticias.php");
                     echo "<p class='lista'>Stock:  {$producto['stock']}</p>";
                     echo "<p class='lista'>Estado:  {$producto['estado']}</p>";
                     
-                    echo "<button class='button'><a href='/DavidDelgado/php/productos/editar_producto.php?id_producto={$producto['id_producto']}'>Editar</a></button>";
-                    echo "<button class='button'><a href='/DavidDelgado/php/productos/borrar_producto.php?id_producto={$producto['id_producto']}'>Borrar</a></button>";
-                    echo "<button class='button comprar-btn' data-id='{$producto['id_producto']}'>Comprar</button>";
+                    if (isset($_SESSION['id_socio']) && $_SESSION['id_socio'] == 0) {
+                        echo "<button class='button'><a href='/DavidDelgado/php/productos/editar_producto.php?id_producto={$producto['id_producto']}'>Editar</a></button>";
+                        echo "<button class='button'><a href='/DavidDelgado/php/productos/borrar_producto.php?id_producto={$producto['id_producto']}'>Borrar</a></button>";
+                    }
+
+                    if (isset($_SESSION['id_socio']) && $_SESSION['id_socio'] != 0) {
+                        echo "<button class='button comprar-btn' data-id='{$producto['id_producto']}'>Comprar</button>";
+                    }
+
                     echo "</div>";
                 }
 

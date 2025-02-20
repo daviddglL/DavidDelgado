@@ -98,15 +98,15 @@ INSERT INTO servicio (descripcion, duracion_servicio, precio_servicio) VALUES
 
 -- Inserting sample data into 'testimonio' table
 INSERT INTO testimonio (autor, contenido, fecha) VALUES
-(1, 'Me encantó la clase de calistenia, muy motivadora.', '2024-11-01'),
+(4, 'Me encantó la clase de calistenia, muy motivadora.', '2024-11-01'),
 (2, 'Las sesiones de calistenia intermedia son un desafío agradable.', '2024-11-02'),
 (3, 'La calistenia avanzada es intensa, pero vale la pena.', '2024-11-03'),
-(1, 'Las instalaciones del club son de primera calidad, me encanta venir aquí.', '2024-11-04'),
+(4, 'Las instalaciones del club son de primera calidad, me encanta venir aquí.', '2024-11-04'),
 (2, 'El personal siempre es amable y está dispuesto a ayudar.', '2024-11-05'),
 (3, 'Gracias a las clases de yoga, me siento más relajado y en forma.', '2024-11-06'),
 (4, 'Las actividades grupales me han ayudado a conocer a personas increíbles.', '2024-11-07'),
 (5, 'Los entrenadores son muy profesionales y atentos.', '2024-11-08'),
-(1, 'Nunca pensé que disfrutaría tanto de las clases de spinning.', '2024-11-09'),
+(4, 'Nunca pensé que disfrutaría tanto de las clases de spinning.', '2024-11-09'),
 (2, 'Las sesiones de HIIT son intensas pero me hacen sentir súper energizado.', '2024-11-10'),
 (3, 'He mejorado mi resistencia gracias a las rutinas personalizadas.', '2024-11-11'),
 (4, 'Me encanta que el club siempre tenga actividades nuevas para probar.', '2024-11-12'),
@@ -169,7 +169,7 @@ INSERT INTO productos (nombre, precio, descripcion, stock, estado, imagen, membr
 
 -- Inserting sample data into 'citas' table
 INSERT INTO citas (codigo_socio, codigo_servicio, fecha_cita, hora_cita) VALUES
-(1, 1, '2024-11-06', '10:00:00'),
+(4, 1, '2024-11-06', '10:00:00'),
 (2, 2, '2024-11-07', '14:00:00'),
 (3, 3, '2024-11-08', '16:00:00'),
 (4, 1, '2024-11-09', '09:00:00'),

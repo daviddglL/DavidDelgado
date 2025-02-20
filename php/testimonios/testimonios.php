@@ -40,18 +40,28 @@
     
     $conexion->close();
 }
-    function selectSocio($conexion){
-        $select="SELECT socio.id_socio, socio.usuario FROM socio WHERE socio.id_socio=1";
+    function selectSocio($conexion) {
+        if (isset($_SESSION['id_socio'])) {
+            $id_socio = $_SESSION['id_socio'];
+            $select = "SELECT socio.id_socio, socio.usuario FROM socio WHERE socio.id_socio = ?";
+            
+            $stmt = $conexion->prepare($select);
+            $stmt->bind_param("i", $id_socio);
+            $stmt->execute();
+            $res = $stmt->get_result();
 
-        $res=$conexion->query($select);
-        if($res){
-            echo "<select type='select' id='socio' name='socio'>";
-            while ($usuarios=$res->fetch_array(MYSQLI_ASSOC)){
-                $usuario=$usuarios['usuario'];
-                $id= $usuarios['id_socio'];
-                echo "<option value='$id'>$usuario</option>";
+            if ($res) {
+                echo "<select type='select' id='socio' name='socio'>";
+                while ($usuarios = $res->fetch_array(MYSQLI_ASSOC)) {
+                    $usuario = $usuarios['usuario'];
+                    $id = $usuarios['id_socio'];
+                    echo "<option value='$id'>$usuario</option>";
+                }
+                echo "</select>";
             }
-            echo "</select>";
+            $stmt->close();
+        } else {
+            echo "<p>No se ha iniciado sesión.</p>";
         }
     }
     function insertarTestimonio() {

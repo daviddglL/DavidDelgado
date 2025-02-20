@@ -2,22 +2,25 @@
 
 
 
-function motrarsocios($search = '') {
+function motrarsocios($search = '', $excludeAdmin = false) {
     global $nombre_db, $nombre_host, $nombre_usuario, $password_db;  
 
     $conexion = conectar($nombre_host, $nombre_usuario, $password_db, $nombre_db);
 
-    $sql_list = "SELECT s.id_socio, s.foto, s.nombre, s.edad, s.contrasena, s.usuario, s.telefono FROM socio s";
+    $sql_list = "SELECT id_socio, usuario, nombre, edad, telefono, contrasena, foto FROM socio";
+    if ($excludeAdmin) {
+        $sql_list .= " WHERE id_socio != 0";
+    }
 
     if ($search) {
-        $sql_list = "SELECT s.id_socio, s.foto, s.nombre, s.edad, s.contrasena, s.usuario, s.telefono FROM socio s WHERE s.nombre LIKE ? OR s.telefono LIKE ?";
+        $searchTerm = '%' . $search . '%';
+        $sql_list .= $excludeAdmin ? " AND" : " WHERE";
+        $sql_list .= " (nombre LIKE ? OR telefono LIKE ?)";
     }
 
     $stmt = $conexion->prepare($sql_list);
 
-
     if ($search) {
-        $searchTerm = '%' . $search . '%';
         $stmt->bind_param("ss", $searchTerm, $searchTerm);
     }
 
@@ -25,36 +28,41 @@ function motrarsocios($search = '') {
     $resultado = $stmt->get_result();
 
     echo "<div class='socios'>";
-    echo "<h2>Resultados de la Búsqueda</h2>";
+    echo "<h2 id='socios'>
+            Nuestros Socios
+         </h2>";
 
     if ($resultado->num_rows > 0) {
         while ($fila = $resultado->fetch_assoc()) {
             echo "<div class='socio'>";
             echo "<img loading='lazy' src='../../img/socios/" . $fila['foto'] . ".jpg' class='imagen-perfil'>";
-            echo "<p>Usuario: " . $fila['usuario'] . "<br> Nombre: " . $fila['nombre'] . "<br> Edad: " . $fila['edad'] . "<br> Teléfono: " . $fila['telefono'] . "<br> Contraseña: " . $fila['contrasena'] . ".</p>";
+            echo "<h3>" . $fila['nombre'] . "</h3>";
+            echo "<p> Usuario: " . $fila["usuario"] . "</p>";
+            echo "<p> Edad: " . $fila['edad'] . "</p>";
+            echo "<p> Teléfono: " . $fila['telefono'] . "</p>";
+
+            if (isset($_SESSION['id_socio']) && $_SESSION['id_socio'] == 0) {
                 echo "<form method='GET' action='socios_formulario.php' class='modificar'>";
                 echo "<input type='hidden' name='id' value='" . $fila['id_socio'] . "'>";
-                echo "<a  href='socios_formulario.php?modificar=" . $fila['id_socio'] . "'>Modificar</a>";
+                echo "<a href='socios_formulario.php?modificar=" . $fila['id_socio'] . "'>Modificar</a>";
                 echo "</form>";
+            }
+
             echo "</div>";
         }
     } else {
-        echo "<p>No se encontraron socios.</p>";
+        echo "<p>No hay socios disponibles.</p>";
     }
 
     echo "</div>";
     $conexion->close();
-
-    
 }
-
 
 function obtenerDatosSocio($id) {
     global $nombre_db, $nombre_host, $nombre_usuario, $password_db;
-
     $conexion = conectar($nombre_host, $nombre_usuario, $password_db, $nombre_db);
 
-    $stmt = $conexion->prepare("SELECT usuario, nombre, edad, telefono, contrasena, foto FROM socio WHERE id_socio = ?");
+    $stmt = $conexion->prepare("SELECT id_socio, usuario, nombre, edad, telefono, contrasena, foto FROM socio WHERE id_socio = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $resultado = $stmt->get_result();

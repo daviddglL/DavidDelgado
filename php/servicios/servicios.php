@@ -1,6 +1,4 @@
-
 <?php
-
 
 function motrarServicios($search = '') {
     global $nombre_db, $nombre_host, $nombre_usuario, $password_db;  
@@ -15,42 +13,41 @@ function motrarServicios($search = '') {
 
     $stmt = $conexion->prepare($sql_list);
 
-
     if ($search) {
         $searchTerm = '%' . $search . '%';
-        $stmt->bind_param("s", $searchTerm, );
+        $stmt->bind_param("s", $searchTerm);
     }
 
     $stmt->execute();
     $resultado = $stmt->get_result();
 
-   echo "<div class='servicios'>";
-   echo "<h2 id='servicios' >
+    echo "<div class='servicios'>";
+    echo "<h2 id='servicios'>
             Nuestros Servicios
          </h2>";
-   
-   
+
     if ($resultado->num_rows > 0) {
         while ($fila = $resultado->fetch_assoc()) {
-           echo "<div class='servicio'>";
-           echo "<h3>" . $fila['descripcion'] . "</h3>";
-           echo "<p> Precio ". $fila["precio_servicio"] . "€";
-           echo "<p> Tiempo Estimado: " .$fila['duracion_servicio'] . " </p>";
+            echo "<div class='servicio'>";
+            echo "<h3>" . $fila['descripcion'] . "</h3>";
+            echo "<p> Precio " . $fila["precio_servicio"] . "€</p>";
+            echo "<p> Tiempo Estimado: " . $fila['duracion_servicio'] . " minutos</p>";
 
-           echo "<form method='GET' action='servicios_formulario.php' class='modificar'>";
+            if (isset($_SESSION['id_socio']) && $_SESSION['id_socio'] == 0) {
+                echo "<form method='GET' action='servicios_formulario.php' class='modificar'>";
                 echo "<input type='hidden' name='id' value='" . $fila['codigo_servicio'] . "'>";
-                echo "<a  href='servicios_formulario.php?modificar=" . $fila['codigo_servicio'] . "'>Modificar</a>";
-            echo "</form>";
-            echo "</div>";
-          }
-    } else {
-       echo "<p>No hay servicios disponibles.</p>";
-     }
-   
-   echo "</div>";
-    $conexion->close();
+                echo "<a href='servicios_formulario.php?modificar=" . $fila['codigo_servicio'] . "'>Modificar</a>";
+                echo "</form>";
+            }
 
-    
+            echo "</div>";
+        }
+    } else {
+        echo "<p>No hay servicios disponibles.</p>";
+    }
+
+    echo "</div>";
+    $conexion->close();
 }
 
 function obtenerDatosServicio($id) {
@@ -72,7 +69,6 @@ function obtenerDatosServicio($id) {
 
     return $datosSocio;
 }
-
 
 function actualizarServicio($id, $duracion_servicio, $descripcion, $precio_servicio) {
     global $nombre_db, $nombre_host, $nombre_usuario, $password_db;
@@ -146,7 +142,7 @@ if (isset($_POST['Guardar_Cambios'])) {
                         </div>
                     </body>
                     </html>";
-                    header("refresh:1; url=servicios_formulario.php");
+        header("refresh:1; url=servicios_formulario.php");
     } else {
         echo "
                     <html>
@@ -196,74 +192,63 @@ if (isset($_POST['Guardar_Cambios'])) {
                         </div>
                     </body>
                     </html>";
-                    header("refresh:1; url=servicios_formulario.php");
+        header("refresh:1; url=servicios_formulario.php");
     }
 }
 
-   function generarServicios() {
+function generarServicios() {
+    global $nombre_db, $nombre_host, $nombre_usuario, $password_db;   
 
-        global $nombre_db,$nombre_host,$nombre_usuario,$password_db;   
-       
-       $conexion = conectar($nombre_host,$nombre_usuario,$password_db,$nombre_db);
-    
-       $sql = "SELECT duracion_servicio, descripcion FROM servicio";
-       $resultado = $conexion->query($sql);
-   
-      
-       echo "<div class='servicios'>";
-       echo "<h2 id='servicios' class='titulo-animado'>
-               Nuestros Servicios
-               <span class='border border-top'></span>
-               <span class='border border-bottom'></span>
-               <span class='border border-left'></span>
-               <span class='border border-right'></span>
-             </h2>";
-       
-       
-       if ($resultado->num_rows > 0) {
-           while ($fila = $resultado->fetch_assoc()) {
-               echo "<div class='servicio'>";
-               echo "<h3>" . $fila['descripcion'] . "</h3>";
-               echo "<p> Tiempo Estimado: " .$fila['duracion_servicio'] . " </p>";
-               echo "</div>";
-           }
-       } else {
-           echo "<p>No hay servicios disponibles.</p>";
-       }
-       
-       echo "</div>";
-   
-       
-       $conexion->close();
-   }
-?>
+    $conexion = conectar($nombre_host, $nombre_usuario, $password_db, $nombre_db);
 
-<?php
+    $sql = "SELECT duracion_servicio, descripcion FROM servicio";
+    $resultado = $conexion->query($sql);
 
+    echo "<div class='servicios'>";
+    echo "<h2 id='servicios' class='titulo-animado'>
+            Nuestros Servicios
+            <span class='border border-top'></span>
+            <span class='border border-bottom'></span>
+            <span class='border border-left'></span>
+            <span class='border border-right'></span>
+          </h2>";
 
-   function insertarServicio() {
+    if ($resultado->num_rows > 0) {
+        while ($fila = $resultado->fetch_assoc()) {
+            echo "<div class='servicio'>";
+            echo "<h3>" . $fila['descripcion'] . "</h3>";
+            echo "<p> Tiempo Estimado: " . $fila['duracion_servicio'] . " minutos</p>";
+            echo "</div>";
+        }
+    } else {
+        echo "<p>No hay servicios disponibles.</p>";
+    }
 
+    echo "</div>";
+
+    $conexion->close();
+}
+
+function insertarServicio() {
     global $nombre_db, $nombre_host, $nombre_usuario, $password_db;
     require_once "../../../DavidDelgado/connection/config.php";
     require_once "../../../DavidDelgado/connection/funciones.php";
-    
+
     $conexion = conectar($nombre_host, $nombre_usuario, $password_db, $nombre_db);
-    
+
     if (isset($_POST['submit'])) {
         $duracion_servicio = $_POST['duracion_servicio'];
         $descripcion = $_POST['descripcion'];
         $precio_servicio = $_POST['precio_servicio'];
 
-    
         $sql = "INSERT INTO servicio (duracion_servicio, descripcion, precio_servicio)
                 VALUES (?, ?, ?)";
-    
+
         if ($insert = $conexion->prepare($sql)) {
             $insert->bind_param("isi", $duracion_servicio, $descripcion, $precio_servicio);
-    
 
-                if ($insert->execute()) {
-                    echo "
+            if ($insert->execute()) {
+                echo "
                     <html>
                     <head>
                         <style>
@@ -312,9 +297,9 @@ if (isset($_POST['Guardar_Cambios'])) {
                         </div>
                     </body>
                     </html>";
-                    header("refresh:1; url=servicios_formulario.php");
-                } else {
-                    echo "
+                header("refresh:1; url=servicios_formulario.php");
+            } else {
+                echo "
                     <html>
                     <head>
                         <style>
@@ -362,18 +347,18 @@ if (isset($_POST['Guardar_Cambios'])) {
                         </div>
                     </body>
                     </html>";
-                    header("refresh:1; url=servicios_formulario.php");
-                }         
-            
+                header("refresh:1; url=servicios_formulario.php");
+            }
+
             $insert->close();
         } else {
             echo "Error al preparar la consulta: " . $conexion->error;
         }
     }
-    
+
     $conexion->close();
-    
 }
+
 if (isset($_POST['submit'])) {
     insertarServicio();
 }

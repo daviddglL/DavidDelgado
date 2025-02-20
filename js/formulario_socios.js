@@ -1,6 +1,6 @@
 "use strict"
 
-let formulario=document.getElementById("form");
+let formulario=document.getElementById("form-modificar");
 let nombre = document.getElementById('nombre');
 let usuario = document.getElementById('usuario');
 let edad=document.getElementById("edad");
@@ -253,3 +253,5 @@ const validarContrasena = () => {
 
 
   }
+
+

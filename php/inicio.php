@@ -19,14 +19,13 @@ function headerr(){
         echo "</li>";
         echo "<li>";
             echo "<a href='" . BASE_URL . "php/testimonios/testimonios_formulario.php'>
-                            Sobre Nosotros
+                            Testimonios
                             <span class='border border-top'></span>
                             <span class='border border-right'></span>
                             <span class='border border-bottom'></span>
                             <span class='border border-left'></span>
                 </a>";
         echo "</li>";
-        
         echo "<li>";
             echo "<a href='" . BASE_URL . "php/servicios/servicios_formulario.php'>
                             Servicios
@@ -37,78 +36,81 @@ function headerr(){
                 </a>";
         echo "</li>";
 
+        if (isset($_SESSION['username'])) {
+            echo "<li>";
+                echo "<a href='" . BASE_URL . "php/citas/citas_formulario.php'>
+                                Citas
+                                <span class='border border-top'></span>
+                                <span class='border border-right'></span>
+                                <span class='border border-bottom'></span>
+                                <span class='border border-left'></span>
+                    </a>";
+            echo "</li>";
+
+            echo "<li>";
+                echo "<a href='" . BASE_URL . "php/socios/socios_formulario.php'>
+                                Socios
+                                <span class='border border-top'></span>
+                                <span class='border border-right'></span>
+                                <span class='border border-bottom'></span>
+                                <span class='border border-left'></span>
+                    </a>";
+            echo "</li>";
+
+            echo "<li>";
+                echo "<a href='" . BASE_URL . "php/noticias/noticias_file.php'>
+                                Noticias
+                                <span class='border border-top'></span>
+                                <span class='border border-right'></span>
+                                <span class='border border-bottom'></span>
+                                <span class='border border-left'></span>
+                    </a>";
+            echo "</li>";
+
+            echo "<li>";
+                echo "<a href='" . BASE_URL . "php/dietas/dietas.php'>
+                                Dietas
+                                <span class='border border-top'></span>
+                                <span class='border border-right'></span>
+                                <span class='border border-bottom'></span>
+                                <span class='border border-left'></span>
+                    </a>";
+            echo "</li>";
+
+            echo "<li>";
+                echo "<a href='" . BASE_URL . "php/productos/productos.php'>
+                                Productos
+                                <span class='border border-top'></span>
+                                <span class='border border-right'></span>
+                                <span class='border border-bottom'></span>
+                                <span class='border border-left'></span>
+                    </a>";
+            echo "</li>";
+        }
+
         echo "<li>";
-        echo "<a href='" . BASE_URL . "php/citas/citas_formulario.php'>
-                        Citas
-                        <span class='border border-top'></span>
-                        <span class='border border-right'></span>
-                        <span class='border border-bottom'></span>
-                        <span class='border border-left'></span>
-            </a>";
+        echo   confirmar_sesion();
         echo "</li>";
-
-        echo "<li>";
-        echo "<a href='" . BASE_URL . "php/socios/socios_formulario.php'>
-                        Socios
-                        <span class='border border-top'></span>
-                        <span class='border border-right'></span>
-                        <span class='border border-bottom'></span>
-                        <span class='border border-left'></span>
-            </a>";
-        echo "</li>";
-
-        echo "<li>";
-            echo "<a href='" . BASE_URL . "php/noticias/noticias_file.php'>
-                            Noticias
-                            <span class='border border-top'></span>
-                            <span class='border border-right'></span>
-                            <span class='border border-bottom'></span>
-                            <span class='border border-left'></span>
-                </a>";
-        echo "</li>";
-
-        echo "<li>";
-        echo "<a href='" . BASE_URL . "php/dietas/dietas.php'>
-                        Dietas
-                        <span class='border border-top'></span>
-                        <span class='border border-right'></span>
-                        <span class='border border-bottom'></span>
-                        <span class='border border-left'></span>
-            </a>";
-    echo "</li>";
-
-    echo "<li>";
-    echo "<a href='" . BASE_URL . "php/productos/productos.php'>
-                    Productos
-                    <span class='border border-top'></span>
-                    <span class='border border-right'></span>
-                    <span class='border border-bottom'></span>
-                    <span class='border border-left'></span>
-        </a>";
-    echo "</li>";
-
-    echo "<li>";
-    echo   confirmar_sesion();
-
-    echo "</li>";
         
     echo "</ul>";
     echo "</div>";
 }
 
+
+
 function confirmar_sesion(){
     if (isset($_SESSION['username'])) {
-        echo "<a class='exit' href='" . BASE_URL . "php/users/cerrar_sesion.php'>
+        return "<a class='exit' href='" . BASE_URL . "php/users/cerrar_sesion.php'>
                 <span class='username'>usuario: " . $_SESSION['username'] . "</span>
                 <img class='exit-icon' src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAwklEQVR4nO2WQQrCMBBFcwlFzyH2W+kBrEctdOYObgQVETOte3uQSuha27RNsjAfZpOQeeTzJ0SpqBCqGEdhNMJoR1ZTEXJrsEyDdkV4jwG3c1QE9ypaLTOESxNOwrg9ynTp1WphXMyaZuivcBfge5EthJJnt5e86nKz9hauXviQpprT/Y/BGNaHcLW/MSELA+bpVkuxXTkH90JdgY2tXTY8j5NmnIM8IIMkEcx/YHUT5LNXEXJzcApUyt3BGhylHOoD09/mmVfEjvUAAAAASUVORK5CYII=' alt='exit'>
               </a>";
     } else {
-        echo "<a href='" . BASE_URL . "php/users/usuarios.php'>
-                usuarios
-                    <span class='border border-top'></span>
-                    <span class='border border-right'></span>
-                    <span class='border border-bottom'></span>
-                    <span class='border border-left'></span>
+        return "<a href='" . BASE_URL . "php/users/usuarios.php'>
+                Acceder
+                <span class='border border-top'></span>
+                <span class='border border-right'></span>
+                <span class='border border-bottom'></span>
+                <span class='border border-left'></span>
              </a>";
     }
 }

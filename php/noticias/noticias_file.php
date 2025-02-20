@@ -1,15 +1,15 @@
 <?php
 
-    require_once "../../connection/config.php";
-    require_once "../../connection/funciones.php";
-    require_once ("../../php/inicio.php");
-    require_once("../noticias/noticias.php");
+require_once "../../connection/config.php";
+require_once "../../connection/funciones.php";
+require_once ("../../php/inicio.php");
+require_once("../noticias/noticias.php");
 
 ?>
 <?php
 // Configuración de la API con parámetros de paginación
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
-$limit = isset($_GET['limit']) && is_numeric($_GET['limit']) ? (int)$_GET['limit'] : 10;
+$limit = isset($_GET['limit']) && is_numeric($_GET['limit']) ? (int)$limit : 10;
 $apiUrl = "http://localhost/club_deportivo/api_productos.php?page=$page&limit=$limit"; // Cambia esta URL al endpoint correcto
 
 ?>
@@ -48,35 +48,38 @@ $apiUrl = "http://localhost/club_deportivo/api_productos.php?page=$page&limit=$l
         }
     ?>
 
-<div class="formulario">
-    <form id="form" method="post" action="noticias.php" enctype="multipart/form-data">
-        <h2>Introduzca los datos de la nueva noticia</h2>
+    <?php if (isset($_SESSION['id_socio']) && $_SESSION['id_socio'] == 0): ?>
+    <div class="formulario">
+        <form id="form" method="post" action="noticias.php" enctype="multipart/form-data">
+            <h2>Introduzca los datos de la nueva noticia</h2>
 
-        <label for="titulo">Titulo de la noticia:</label>
-        <input type="text" id="titulo" name="titulo" placeholder="Introduzca el titulo de la noticia"/>
-        <span class="error"></span>
-        <br/><br/>
+            <label for="titulo">Titulo de la noticia:</label>
+            <input type="text" id="titulo" name="titulo" placeholder="Introduzca el titulo de la noticia"/>
+            <span class="error"></span>
+            <br/><br/>
 
-        <label for="contenido">Introduzca el contenido</label>
-        <textarea name="contenido" id="contenido" cols="60" rows="15"></textarea>
+            <label for="contenido">Introduzca el contenido</label>
+            <textarea name="contenido" id="contenido" cols="60" rows="15"></textarea>
 
-        <span class="error"></span>
-        <br/><br/>
+            <span class="error"></span>
+            <br/><br/>
 
-        <label for="fecha">Introduzca la fecha de publicación</label>
-        <input type="date" id="fecha" name="fecha_publicacion"/>
-        <span class="error"></span>
-        <br/><br/>
+            <label for="fecha">Introduzca la fecha de publicación</label>
+            <input type="date" id="fecha" name="fecha_publicacion"/>
+            <span class="error"></span>
+            <br/><br/>
 
-        <label for="imagen">Suba la imagen de perfil de su usuario</label>
-        <input type="file" name="imagen" id="imagen" placeholder="La imagen debe tener la extensión .webp"/>
-        <span class="error"></span>
-        <br/><br/>
+            <label for="imagen">Suba la imagen de perfil de su usuario</label>
+            <input type="file" name="imagen" id="imagen" placeholder="La imagen debe tener la extensión .webp"/>
+            <span class="error"></span>
+            <br/><br/>
 
-        <button class="button" type="submit" name="submit">Enviar</button>
+            <button class="button" type="submit" name="submit">Enviar</button>
 
-    </form>
+        </form>
     </div>
+    <?php endif; ?>
+
     <?php
         echo "</div>";
         news();
