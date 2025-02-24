@@ -29,6 +29,11 @@ require_once("../socios/socios.php");
             text-align: center;
         }
 
+        <?php if (isset($_SESSION['id_socio']) && $_SESSION['id_socio'] != 0): ?>
+        .formulario {
+            margin-top: 250px;
+        }
+        <?php endif; ?>
     </style>
 </head>
 <body>
@@ -38,6 +43,7 @@ require_once("../socios/socios.php");
         contactos();
         echo "<div class='secc'><!--sección central-->";
     ?>
+        <?php if (isset($_SESSION['id_socio']) && $_SESSION['id_socio'] == 0): ?>
         <div class="search-container">
             <h2>Buscar Socio</h2>
 
@@ -46,6 +52,7 @@ require_once("../socios/socios.php");
                 <button type="submit" name="busqueda">Buscar</button>
             </form>  
         </div>
+        <?php endif; ?>
 
     <div id="resultadoSocios">
         <?php 
@@ -121,17 +128,20 @@ require_once("../socios/socios.php");
                             <h2>Modificar Socio</h2>
                             
                             <input type='hidden' name='id_socio' value='" . $id_socio . "'>
+                            <input type='hidden' name='usuario' value='" . $datosSocio['usuario'] . "'>
+                            <input type='hidden' name='nombre' value='" . $datosSocio['nombre'] . "'>
+                            <input type='hidden' name='edad' value='" . $datosSocio['edad'] . "'>
 
                             <label for='usuario'>Usuario:</label>
-                            <input type='text' name='usuario' id='usuario' value='" . $datosSocio['usuario']  . "' disabled>
+                            <input type='text' name='usuario_disabled' id='usuario' value='" . $datosSocio['usuario']  . "' disabled>
                             <span class='error'></span>
 
                             <label for='nombre'>Nombre:</label>
-                            <input type='text' name='nombre' id='nombre' value='" . $datosSocio['nombre'] . "' disabled>
+                            <input type='text' name='nombre_disabled' id='nombre' value='" . $datosSocio['nombre'] . "' disabled>
                             <span class='error'></span>
 
                             <label for='edad'>Edad:</label>
-                            <input type='text' name='edad' id='edad' value='" . $datosSocio['edad'] . "' disabled>
+                            <input type='text' name='edad_disabled' id='edad' value='" . $datosSocio['edad'] . "' disabled>
                             <span class='error'></span>
 
                             <label for='telefono'>Teléfono:</label>

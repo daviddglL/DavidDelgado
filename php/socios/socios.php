@@ -110,9 +110,9 @@ function actualizarSocio($id, $usuario, $nombre, $edad, $telefono, $contrasena, 
 
 if (isset($_POST['guardar_cambios'])) {
     $id = $_POST['id_socio'];
-    $usuario = $_POST['usuario'];
-    $nombre = $_POST['nombre'];
-    $edad = $_POST['edad'];
+    $usuario = $_POST['usuario'] ?? '';
+    $nombre = $_POST['nombre'] ?? '';
+    $edad = $_POST['edad'] ?? '';
     $telefono = $_POST['telefono'];
     $contrasena = $_POST['contrasena'];
     $nombreArchivo = "anonimo"; 
@@ -187,7 +187,7 @@ if (isset($_POST['guardar_cambios'])) {
                         </div>
                 </body>
             </html>";
-            header("refresh:1; url=socios_formulario.php");
+            header("refresh:3; url=socios_formulario.php");
     } else {
         echo "
         <html>
