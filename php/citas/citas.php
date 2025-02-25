@@ -1,13 +1,35 @@
 <?php
 
 function crearBoton($fecha, $citas) {
-    if (isset($citas[$fecha])) {
-        return "<form class='calendar' method='GET' action=''>
-                    <input type='hidden' name='fecha' value='$fecha'>
-                    <button type='submit'>Ver citas</button>
-                </form>";
+    $id_socio = $_SESSION['id_socio'];
+    if ($id_socio === 0) {
+
+        if (isset($citas[$fecha])) {
+            return "<form class='calendar' method='GET' action=''>
+                        <input type='hidden' name='fecha' value='$fecha'>
+                        <button type='submit'>Ver citas</button>
+                    </form>";
+        }
+        return '';
     }
-    return '';
+    else{
+        if ($id_socio != 0 && isset($citas[$fecha]) && is_array($citas[$fecha])) {
+            foreach ($citas[$fecha] as $cita) {
+                if (isset($cita['codigo_socio']) && $cita['codigo_socio'] == $id_socio) {
+                    return "<form class='calendar' method='GET' action=''>
+                                <input type='hidden' name='fecha' value='" . htmlspecialchars($fecha, ENT_QUOTES, 'UTF-8') . "'>
+                                <button type='submit'>Ver citas</button>
+                            </form>";
+                }
+            }
+        }
+        return '';
+        
+        
+
+        
+    }
+    
 }
 
 
@@ -43,9 +65,9 @@ function calendar($conexion) {
     // Navegación entre meses
     echo "<div class='navigation'>";
     echo "<a href='?action=prev&month=$currentMonth&year=$currentYear'>&laquo; Previous</a>";
-    echo "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;";
+    echo "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;";
     echo "<span class='month'>" . date("F Y", $timestamp) . "</span>";
-    echo "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;";
+    echo "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;";
     echo "<a href='?action=next&month=$currentMonth&year=$currentYear'>Next &raquo;</a>";
     echo "</div><br>";
 
@@ -84,10 +106,9 @@ function obtenerCitasPorMes($conexion, $mes, $año) {
     $inicioMes = sprintf('%04d-%02d-01', $año, $mes);
     $finMes = date("Y-m-t", strtotime($inicioMes));
 
-    $sql = "SELECT fecha_cita, GROUP_CONCAT(hora_cita SEPARATOR ', ') AS horas
+    $sql = "SELECT fecha_cita, hora_cita, codigo_socio
             FROM citas
-            WHERE fecha_cita BETWEEN ? AND ?
-            GROUP BY fecha_cita";
+            WHERE fecha_cita BETWEEN ? AND ?";
 
     if ($stmt = $conexion->prepare($sql)) {
         $stmt->bind_param('ss', $inicioMes, $finMes);
@@ -96,13 +117,19 @@ function obtenerCitasPorMes($conexion, $mes, $año) {
 
         $citas = [];
         while ($fila = $resultado->fetch_assoc()) {
-            $citas[$fila['fecha_cita']] = explode(', ', $fila['horas']);
+            $fecha = $fila['fecha_cita'];
+            $citas[$fecha][] = [
+                'hora' => $fila['hora_cita'],
+                'codigo_socio' => $fila['codigo_socio']
+            ];
         }
         $stmt->close();
         return $citas;
     } 
 
+    return [];
 }
+
 
 function obtenerDatosCitas($conexion, $searchTerm) {
     // Consulta SQL que busca en socio, servicio y fecha
@@ -164,44 +191,79 @@ function actualizarEstadoCitasPasadas($conexion) {
 
  function mostrarCitas($conexion, $fecha){
     actualizarEstadoCitasPasadas($conexion);
+    $id_socio = $_SESSION['id_socio'];
+    if ($id_socio === 0) {
         $sql = "SELECT id_cita, socio.nombre, servicio.descripcion, fecha_cita, hora_cita, estado FROM citas c 
                 INNER JOIN socio on socio.id_socio= c.codigo_socio  
                 INNER JOIN servicio on servicio.codigo_servicio= c.codigo_servicio 
                 WHERE c.fecha_cita= ?";
-    
+
+
         if ($stmt = $conexion->prepare($sql)) {
             $stmt->bind_param('s', $fecha);
             $stmt->execute();
             $resultado = $stmt->get_result();
             
+                if ($resultado->num_rows > 0) {
+                    echo "<br><br><div class='citas'>";
+                    echo "<h3>Citas para el día $fecha:</h3>";
+                    echo "<table class='appointment-table'>";
+                    echo "<tr><th>Socio</th><th>Servicio</th><th>Fecha</th><th>Hora</th><th>Estado</th></tr>";
+                    while ($fila = $resultado->fetch_assoc()) {
+                        echo "<tr>";
+                            echo "<td>{$fila['nombre']}</td>";
+                            echo "<td>{$fila['descripcion']}</td>";
+                            echo "<td>{$fila['fecha_cita']}</td>";
+                            echo "<td>{$fila['hora_cita']}</td>";
+                            echo "<td>";
+                                if ($fila['estado'] === 'pendiente') {
+                                    echo "
+                                    <form class='borrar' method='POST' action='citas.php'>
+                                        <input type='hidden' name='id_cita' value='{$fila['id_cita']}'>
+                                        <button type='submit' class='cancel-button'>Anular</button>
+                                    </form>";
+                                } elseif ($fila['estado'] === 'anulada' && $fila['fecha_cita'] > date('Y-m-d')) {
+                                    echo "
+                                    <form class='borrar' method='POST' action='citas.php'>
+                                        <input type='hidden' name='borrar' value='{$fila['id_cita']}'>
+                                        <button type='submit' class='delete-button'>Borrar</button>
+                                    </form>";
+                                } elseif ($fila['estado'] === 'completada') {
+                                    echo "<span class='completed-message'>Realizada</span>";
+                                }
+                            echo "</td>";
+                        echo "</tr>";
+                        
+                            }
+                            echo "</table>";
+                        } else {
+                            echo "<p>No hay citas para el día $fecha.</p>";
+                        }
+                            echo "</div>";
+                        $stmt->close();
+                    } 
+        } else {
+            $sql = "SELECT id_cita, socio.nombre, servicio.descripcion, fecha_cita, hora_cita, estado FROM citas c 
+                    INNER JOIN socio on socio.id_socio= c.codigo_socio  
+                    INNER JOIN servicio on servicio.codigo_servicio= c.codigo_servicio 
+                    WHERE c.codigo_socio = ? AND c.fecha_cita= ?";
+
+            if ($stmt = $conexion->prepare($sql)) {
+                $stmt->bind_param('is', $id_socio, $fecha);
+                $stmt->execute();
+                $resultado = $stmt->get_result();
+    
             if ($resultado->num_rows > 0) {
                 echo "<br><br><div class='citas'>";
                 echo "<h3>Citas para el día $fecha:</h3>";
                 echo "<table class='appointment-table'>";
-                echo "<tr><th>Socio</th><th>Servicio</th><th>Fecha</th><th>Hora</th><th>Estado</th></tr>";
+                echo "<tr><th>Socio</th><th>Servicio</th><th>Fecha</th><th>Hora</th></tr>";
                 while ($fila = $resultado->fetch_assoc()) {
                     echo "<tr>";
                         echo "<td>{$fila['nombre']}</td>";
                         echo "<td>{$fila['descripcion']}</td>";
                         echo "<td>{$fila['fecha_cita']}</td>";
                         echo "<td>{$fila['hora_cita']}</td>";
-                        echo "<td>";
-                            if ($fila['estado'] === 'pendiente') {
-                                echo "
-                                <form class='borrar' method='POST' action='citas.php'>
-                                    <input type='hidden' name='id_cita' value='{$fila['id_cita']}'>
-                                    <button type='submit' class='cancel-button'>Anular</button>
-                                </form>";
-                            } elseif ($fila['estado'] === 'anulada' && $fila['fecha_cita'] > date('Y-m-d')) {
-                                echo "
-                                <form class='borrar' method='POST' action='citas.php'>
-                                    <input type='hidden' name='borrar' value='{$fila['id_cita']}'>
-                                    <button type='submit' class='delete-button'>Borrar</button>
-                                </form>";
-                            } elseif ($fila['estado'] === 'completada') {
-                                echo "<span class='completed-message'>Realizada</span>";
-                            }
-                        echo "</td>";
                     echo "</tr>";
                     
                 }
@@ -211,7 +273,10 @@ function actualizarEstadoCitasPasadas($conexion) {
             }
                 echo "</div>";
             $stmt->close();
-        } 
+} 
+        }
+            
+        
     
  }
 

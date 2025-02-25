@@ -2,49 +2,50 @@
     <?php
     function noticias() {
         global $nombre_db, $nombre_host, $nombre_usuario, $password_db;
-
+    
         $conexion = conectar($nombre_host, $nombre_usuario, $password_db, $nombre_db);
-        $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
-        $noticiasPorPagina = 4;
-        $offset = ($pagina - 1) * $noticiasPorPagina;
-
+    
+        $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+        $limit = isset($_GET['limit']) && is_numeric($_GET['limit']) ? (int)$_GET['limit'] : 4;
+        $search = isset($_GET['search']) ? $_GET['search'] : '';
+        $offset = ($page - 1) * $limit;
+    
         $sql_news = "SELECT n.id_noticia AS id_noticia, n.titulo, n.imagen, n.fecha_publicacion, 
                             SUBSTRING_INDEX(n.contenido, ' ', 15) AS resumen
-                    FROM noticia n
-                    ORDER BY n.fecha_publicacion DESC
-                    LIMIT $noticiasPorPagina OFFSET $offset";
-
-        $resultado = $conexion->query($sql_news);
-
+                     FROM noticia n
+                     WHERE n.titulo LIKE ? OR n.contenido LIKE ?
+                     ORDER BY n.fecha_publicacion DESC
+                     LIMIT ? OFFSET ?";
+    
+        $stmt = $conexion->prepare($sql_news);
+        $searchTerm = '%' . $search . '%';
+        $stmt->bind_param('ssii', $searchTerm, $searchTerm, $limit, $offset);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+    
         echo "<div class='cards-container'>";
-
+    
         while ($fila = $resultado->fetch_assoc()) {
             echo "<div class='card'>";
             echo "<h3>{$fila['titulo']}</h3>";
             echo "<img src='/../DavidDelgado/img/news/" . $fila['imagen'] . ".jpg'>";
             echo "<p>{$fila['fecha_publicacion']}</p>";
             echo "<p>{$fila['resumen']}...</p>";
-            
             echo "<button class='button'><a href='/DavidDelgado/php/noticias/noticias_file1.php?id={$fila['id_noticia']}'>Ver más</a></button>";
-
             echo "</div>";
         }
-
+    
         echo "</div>";
-
-        
-
-
+    
         // Paginación
-        $paginaAnterior = max($pagina - 1, 1);
-        $paginaSiguiente = $pagina + 1;
-        echo "<div>";
-        echo "<a class='paginado' href='?pagina=$paginaAnterior'>&laquo  </a> ";
-        echo "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;";
-        echo "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;";
-        echo "<a class='paginado' id='siguiente' href='?pagina=$paginaSiguiente'> &raquo </a>";
+        $paginaAnterior = max($page - 1, 1);
+        $paginaSiguiente = $page + 1;
+        echo "<div class='pagination'>";
+        echo "<button class='button'><a  href='?page=$paginaAnterior&limit=$limit&search=" . urlencode($search) . "'>&laquo; Anterior</a></button>";
+        echo "<span class='current-page'> $page&emsp;</span>";
+        echo "<button class='button'><a  href='?page=$paginaSiguiente&limit=$limit&search=" . urlencode($search) . "'>  Siguiente &raquo;</a></button>";
         echo "</div>";
-
+    
         $conexion->close();
     }
 

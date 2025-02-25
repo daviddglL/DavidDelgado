@@ -101,21 +101,20 @@
 		return $salida;
 	}
 
-	function modificarProducto($conexion, $id, $nombre, $precio, $descripcion, $stock, $membresia) {
+	function modificarProducto($conexion, $id, $nombre, $precio, $descripcion, $stock) {
     // Convertir los datos a los tipos correctos
     $id = (int) $id;
     $precio = (float) $precio;
     $stock = (int) $stock;
-    $membresia = (bool) $membresia;
 
     // Validar los datos
-    if (is_int($id) && 
-        trim($nombre) !== "" && is_float($precio) && trim($descripcion) !== "" && is_int($stock) && is_bool($membresia)) {
+    if (isset($id) && 
+        trim($nombre) !== "" && is_float($precio) && trim($descripcion) !== "" && is_int($stock)) {
         
         $estado = ($stock > 0) ? "disponible" : "agotado";
         
         $consulta = "UPDATE productos 
-                     SET nombre = ?, precio = ?, descripcion = ?, stock = ?, estado = ?, membresia = ?
+                     SET nombre = ?, precio = ?, descripcion = ?, stock = ?, estado = ?
                      WHERE id_producto = ?";
         $sentencia = $conexion->prepare($consulta);
         
@@ -123,7 +122,7 @@
             return ["http" => 500, "respuesta" => ["error" => "Error en la preparación de la consulta: " . $conexion->error]];
         }
         
-        $sentencia->bind_param("sdsisii", $nombre, $precio, $descripcion, $stock, $estado, $membresia, $id);
+        $sentencia->bind_param("sdsisi", $nombre, $precio, $descripcion, $stock, $estado, $id);
         $sentencia->execute();
         
         if ($sentencia->affected_rows > 0) {

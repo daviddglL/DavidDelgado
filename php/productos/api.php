@@ -60,15 +60,15 @@ switch ($metodo) {
         // Depuración: imprimir el contenido de $entrada
         error_log("Contenido de entrada: " . json_encode($entrada));
 
-        if (isset($entrada["id_producto"], $entrada["nombre"], $entrada["precio"], $entrada["descripcion"], $entrada["stock"], $entrada["membresia"])) {
+        if (isset($entrada["id_producto"], $entrada["nombre"], $entrada["precio"], $entrada["descripcion"], $entrada["stock"])) {
             $resultado = modificarProducto(
                 $conn,
                 $entrada["id_producto"],
                 $entrada["nombre"],
                 $entrada["precio"],
                 $entrada["descripcion"],
-                $entrada["stock"],
-                $entrada["membresia"]
+                $entrada["stock"]
+
             );
 
             http_response_code($resultado["http"]);

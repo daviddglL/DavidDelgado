@@ -18,6 +18,7 @@ $conexion = conectar($nombre_host, $nombre_usuario, $password_db, $nombre_db);
 
 function obtenerProducto($conexion, $id) {
     global $apiUrl;
+
     $ch = curl_init();
 
     curl_setopt($ch, CURLOPT_URL, $apiUrl . "?id_producto=" . $id);
@@ -38,13 +39,19 @@ function obtenerProducto($conexion, $id) {
             echo "Error de decodificación JSON: " . json_last_error_msg();
         }
         
-// Verificar si 'datos' existe y contiene productos
         if (isset($respuesta_decodificada['datos']) && is_array($respuesta_decodificada['datos']) && count($respuesta_decodificada['datos']) > 0) {
-            return $respuesta_decodificada['datos'][0];  // Devuelve el primer producto
+            foreach ($respuesta_decodificada['datos'] as $producto) {
+                if ($producto["id_producto"] == $id) {
+                    return $producto;  // Retorna los datos del producto con el ID correcto
+                }
+            }
+            echo "Producto con ID $id no encontrado.";
+            return null;
         } else {
-            echo "No se encontraron productos en la respuesta.";  // Si no se encuentra el producto
-            return null;  
+            echo "No se encontraron productos en la respuesta.";
+            return null;
         }
+        
 
     } else {
         echo "Error al ejecutar la consulta API. Código HTTP: " . $httpCode;

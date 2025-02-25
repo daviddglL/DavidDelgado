@@ -28,10 +28,8 @@ require_once __DIR__ . "/../users/iniciar_sesion.php";
         
         if (isset($_SESSION['username'])) {
             echo formulario_sesion_iniciada($_SESSION['username']);
-            echo "<p>sesion iniciada</p>";
         } else {
             echo formulario_para_iniciar_sesion($pagina_actual);
-            echo "<p>sesion no iniciada</p>";
         }
         echo "</div>";
         echo "</div>";

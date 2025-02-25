@@ -121,19 +121,19 @@ require_once("../noticias/noticias.php");
                 echo '<div class="pagination">';
             
                 if ($actual > 1) {
-                    echo '<a class="paginacion" href="?page=' . ($actual - 1) . '&limit=' . $limite . '&search=' . urlencode($search) . '">Anterior</a>';
+                    echo '<button class="button"> <a  href="?page=' . ($actual - 1) . '&limit=' . $limite . '&search=' . urlencode($search) . '">Anterior</a></button>';
                 }
             
                 for ($i = 1; $i <= $total; $i++) {
                     if ($i == $actual) {
-                        echo '<span class="current">' . $i . '</span>';
+                        echo '<span class="current">' . $i . "&emsp;". '</span>';
                     } else {
-                        echo '<a class="paginacion" href="?page=' . $i . '&limit=' . $limite . '&search=' . urlencode($search) . '">' . $i . '</a>';
+                        echo '<a  href="?page=' . $i . '&limit=' . $limite . '&search=' . urlencode($search) . '">' . $i . "&emsp;".'</a>';
                     }
                 }
             
                 if ($actual < $total) {
-                    echo '<a class="paginacion" href="?page=' . ($actual + 1) . '&limit=' . $limite . '&search=' . urlencode($search) . '">Siguiente</a>';
+                    echo '<button class="button"><a  href="?page=' . ($actual + 1) . '&limit=' . $limite . '&search=' . urlencode($search) . '">Siguiente</a></button>';
                 }
             
                 echo '</div>';
