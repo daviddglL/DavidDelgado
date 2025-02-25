@@ -1,31 +1,41 @@
 <?php
 // URL del backend (API)
+$apiUrl = "http://localhost/DavidDelgado/php/productos/api.php"; // Cambia esta URL al endpoint correcto
 
 // Procesar el formulario al enviarlo
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['nombre']) && isset($_POST['precio']) && isset($_POST['descripcion']) && isset($_POST['stock']) && isset($_FILES['imagen'])) {
+        $nombre = $_POST['nombre'];
+        $precio = (float) $_POST['precio'];
+        $descripcion = $_POST['descripcion'];
+        $stock = (int) $_POST['stock'];
+        $estado = $stock > 0 ? 'disponible' : 'no disponible';
+        $imagen = $_FILES['imagen']['name'];
+        $imagen_tmp = $_FILES['imagen']['tmp_name'];
 
-    $apiUrl="http://localhost/DavidDelgado/php/productos/api.php"; // Cambia esta URL al endpoint correcto
+        // Mover la imagen a la carpeta de destino
+        move_uploaded_file($imagen_tmp, "../../img/productos/" . $imagen . ".jpg");
 
-    if (isset($_POST['nombre_asignatura']) && isset($_POST['creditos'])) {
-        $nombre_asignatura =$_POST['nombre_asignatura'];
-        $creditos=(int) $_POST['creditos'];
-        $ch= curl_init();
-
+        $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $apiUrl);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
-            'nombre_asignatura' => $nombre_asignatura,
-            'creditos' => $creditos
+            'nombre' => $nombre,
+            'precio' => $precio,
+            'descripcion' => $descripcion,
+            'stock' => $stock,
+            'estado' => $estado,
+            'imagen' => $imagen
         ]));
 
-        curl_setopt($ch, CURLOPT_HTTPHEADER,[
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-Type: application/json',
         ]);
 
         // Ejecutar la solicitud
-        $respuesta = json_decode(curl_exec($ch),true);
-        $httpCode= curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $respuesta = json_decode(curl_exec($ch), true);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         if ($httpCode == 200) {
             echo "
@@ -72,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </head>
                 <body>
                         <div class='message-container'>
-                            <p class='success'>¡Producto borrado correctamente!</p>
+                            <p class='success'>¡Producto agregado correctamente!</p>
                             <p class='redirect'>Serás redirigido en 3 segundos...</p>
                         </div>
                 </body>
@@ -123,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </head>
             <body>
                 <div class='message-container'>
-                    <p class='error'>Error al borrar el producto: " . $respuesta["error"] . "</p>
+                    <p class='error'>Error al agregar el producto: " . $respuesta["error"] . "</p>
                     <p class='redirect'>Serás redirigido en 3 segundos...</p>
                 </div>
             </body>
@@ -139,41 +149,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Añadir Asignatura</title>
-    <link rel="stylesheet" href="estilos.css">
+    <title>Agregar Producto</title>
+    <link rel="stylesheet" href="../../estilos/styles.css">
 </head>
-
 <body>
-    <h1>Añadir Asignatura</h1>
+    <div class="container">
+        <h2>Agregar Nuevo Producto</h2>
+        <form id="agregar-producto-form" action="agregar_producto.php" method="POST" enctype="multipart/form-data">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
 
-    <?php if (isset($mensaje)) {
-        echo "<p style='color: green;'>" . $mensaje;
-        "</p>";
-        header("Refresh: 3; url=index.php");
-    }
-    ?>
+            <label for="precio">Precio:</label>
+            <input type="number" id="precio" name="precio" step="0.01" required>
 
-    <?php if (isset($error)) {
-        echo "<p style='color: red;'>" . $error;
-        "</p>";
-    }
-    ?>
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" required></textarea>
 
-    <form method="POST">
-        <label for="nombre_asignatura">Nombre de la asignatura:</label>
-        <input type="text" id="nombre_asignatura" name="nombre_asignatura" required>
+            <label for="stock">Stock:</label>
+            <input type="number" id="stock" name="stock" required>
 
-        <label for="creditos">Créditos:</label>
-        <input type="number" id="creditos" name="creditos" required>
+            <label for="imagen">Imagen:</label>
+            <input type="file" id="imagen" name="imagen" accept="image/*" required>
 
-        <button type="submit" class="add">Añadir Asignatura</button>
-    </form>
-
-    <a style="color:darkgreen" href="index.php">Volver al listado</a>
+            <button type="submit" class="button">Agregar Producto</button>
+        </form>
+    </div>
 </body>
-
 </html>
+

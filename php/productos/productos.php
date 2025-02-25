@@ -141,6 +141,10 @@ require_once("../noticias/noticias.php");
                 echo "<p>" . $respuesta["error"] . "AYUDAAAAAA</p>";
             }
 
+            if (isset($_SESSION['id_socio']) && $_SESSION['id_socio'] === 0) {
+                echo "<button class='button'><a href='/DavidDelgado/php/productos/agregar_producto.php'>Agregar Producto</a></button>";
+            }
+
             echo "</div>";
             news();
             footer();   
