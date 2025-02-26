@@ -29,7 +29,6 @@ function obtenerProducto($conexion, $id) {
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-
     if ($httpCode == 200 && $respuesta) {
         // Elimina cualquier texto no relacionado con JSON antes de decodificarlo
         $respuesta_limpia = preg_replace('/^[^{]*/', '', $respuesta);  // Elimina lo que esté antes del JSON
@@ -37,8 +36,12 @@ function obtenerProducto($conexion, $id) {
 
         if (json_last_error() !== JSON_ERROR_NONE) {
             echo "Error de decodificación JSON: " . json_last_error_msg();
+            error_log("Error de decodificación JSON: " . json_last_error_msg());
+            return null;
         }
         
+        error_log("Respuesta decodificada: " . print_r($respuesta_decodificada, true));
+
         if (isset($respuesta_decodificada['datos']) && is_array($respuesta_decodificada['datos']) && count($respuesta_decodificada['datos']) > 0) {
             foreach ($respuesta_decodificada['datos'] as $producto) {
                 if ($producto["id_producto"] == $id) {
@@ -46,31 +49,27 @@ function obtenerProducto($conexion, $id) {
                 }
             }
             echo "Producto con ID $id no encontrado.";
+            error_log("Producto con ID $id no encontrado.");
             return null;
         } else {
             echo "No se encontraron productos en la respuesta.";
+            error_log("No se encontraron productos en la respuesta.");
             return null;
         }
-        
-
     } else {
         echo "Error al ejecutar la consulta API. Código HTTP: " . $httpCode;
+        error_log("Error al ejecutar la consulta API. Código HTTP: " . $httpCode);
         return null;
     }
 }
 
-
-
-
 if (isset($_GET['id_producto'])) {
     $id_producto = $_GET['id_producto'];
-    
     $producto = obtenerProducto($conexion, $id_producto);
-    
 } else {
     echo "No se ha recibido el parámetro id_producto.";
+    error_log("No se ha recibido el parámetro id_producto.");
 }
-
 
 // Si se envió el formulario
 if (isset($_POST['cambios_producto'])) {
@@ -81,7 +80,6 @@ if (isset($_POST['cambios_producto'])) {
         $descripcion = $_POST['descripcion'];
         $stock = (int) $_POST['stock'];
         $membresia = (isset($_POST['membresia']) && $_POST['membresia'] === 'on') ? 1 : 0; // Conversión de checkbox
-
 
         $ch = curl_init();
 
@@ -254,7 +252,6 @@ if (isset($_POST['cambios_producto'])) {
 
     <?php
 
-
     if (isset($error)) {
         echo '<p style="color: red;">' . $error . '</p>';
     }
@@ -291,7 +288,6 @@ if (isset($_POST['cambios_producto'])) {
     } else {
         echo '<p>Producto no encontrado.</p>';
     }
-    
     ?>
     </div>
     <?php

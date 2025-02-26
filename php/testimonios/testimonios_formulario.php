@@ -30,7 +30,10 @@ require_once("../socios/socios.php");
     ?>
 
     <div id="resultadoSocios">
-        <?php if (isset($_SESSION['username'])): ?>
+        
+        <?php
+        $id_socio = $_SESSION['id_socio'];
+         if ($id_socio != 0): ?>
         <div class="formulario">
             <form id="form" method="POST" action="testimonios.php" enctype="multipart/form-data">
                 <h2>Introduzca los datos del nuevo testimonio</h2>

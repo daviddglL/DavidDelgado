@@ -36,20 +36,46 @@ switch ($metodo) {
         break;
 
     case 'POST':
-        if (isset($entrada["nombre"]) && isset($entrada["precio"]) && isset($entrada["descripcion"]) && isset($entrada["stock"]) && isset($entrada["imagen"]) && isset($entrada["membresia"])) {
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
+        
+        // Capturar el JSON recibido
+        $input = file_get_contents("php://input");
+        error_log("Datos recibidos en API: " . $input);
+        
+        $data = json_decode($input, true);
+        
+        // Verificar si los datos fueron decodificados correctamente
+        if ($data === null) {
+            error_log("Error: JSON mal formado o vacío.");
+            echo json_encode(["error" => "JSON mal formado o vacío."]);
+            exit();
+        }
+        
+        // Verificar que los campos requeridos están presentes
+        if (!isset($data['nombre'], $data['precio'], $data['descripcion'], $data['stock'], $data['estado'], $data['imagen'], $data['membresia'])) {
+            error_log("Error: Datos incompletos en la API.");
+            echo json_encode(["error" => "Faltan datos en la solicitud"]);
+            exit();
+        }
+        
+        if (isset($data["nombre"]) && isset($data["precio"]) && isset($data["descripcion"]) && isset($data["stock"]) && isset($data["imagen"]) && isset($data["membresia"])) {
             $resultado = crearProducto(
                 $conn,
-                $entrada["nombre"],
-                $entrada["precio"],
-                $entrada["descripcion"],
-                $entrada["stock"],
-                $entrada["imagen"],
-                $entrada["membresia"]
+                $data["nombre"],
+                (float) $data["precio"],  
+                $data["descripcion"],
+                (int) $data["stock"],      
+                $data["imagen"],
+                (bool) $data["membresia"]  
             );
+        
+        
 
             http_response_code($resultado["http"]);
             echo json_encode($resultado["respuesta"]);
         } else {
+            
             http_response_code(405);
             echo json_encode(["error" => "Faltan parametros"]);
         }

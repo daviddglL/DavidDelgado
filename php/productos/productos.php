@@ -97,7 +97,7 @@ require_once("../noticias/noticias.php");
                     echo "<div class='card'>";
                     echo "<h3 class='titulo'>{$producto['nombre']}</h3>";
                     echo "<img src='/../DavidDelgado/img/productos/" . $producto['imagen'] . ".jpg'>";
-                    echo "<p class='lista'>Precio:  {$producto['precio']}</p>";
+                    echo "<p class='lista'>Precio:  {$producto['precio']}€</p>";
                     echo "<p class='lista'>Descripción:  {$producto['descripcion']}</p>";
                     echo "<p class='lista'>Stock:  {$producto['stock']}</p>";
                     echo "<p class='lista'>Estado:  {$producto['estado']}</p>";

@@ -157,11 +157,44 @@
 
 		return $salida;
 	}
+/*
+	function obtenerProducto($conexion, $id) {
+	$consulta = "SELECT id_producto, nombre, precio, descripcion, stock, estado, imagen, membresia FROM productos WHERE id_producto = ?";
+	$sentencia = $conexion->prepare($consulta);
+	$sentencia->bind_param("i", $id);
+	$sentencia->execute();
+	$resultado = $sentencia->get_result();
 
+	if ($resultado->num_rows > 0) {
+		$producto = $resultado->fetch_assoc();
+		$salida = ["http" => 200, "respuesta" => $producto];
+	} else {
+		$salida = ["http" => 404, "respuesta" => ["error" => "Producto no encontrado"]];
+	}
 
+	$sentencia->close();
+	return $salida;}
+*/
+	function agregarProducto($conexion, $nombre, $precio, $descripcion, $stock, $estado, $imagen, $membresia) {
+    $consulta = "INSERT INTO productos (nombre, precio, descripcion, stock, estado, imagen, membresia) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $sentencia = $conexion->prepare($consulta);
 
+    if ($sentencia === false) {
+        return ["http" => 500, "respuesta" => ["error" => "Error en la preparación de la consulta: " . $conexion->error]];
+    }
 
+    $sentencia->bind_param("sdssisi", $nombre, $precio, $descripcion, $stock, $estado, $imagen, $membresia);
 
+    $sentencia->execute();
 
+    if ($sentencia->affected_rows > 0) {
+        $salida = ["http" => 200, "respuesta" => ["mensaje" => "Producto agregado correctamente"]];
+    } else {
+        $salida = ["http" => 500, "respuesta" => ["error" => "Error al agregar el producto"]];
+    }
 
+    $sentencia->close();
+    return $salida;
+}
 ?>
