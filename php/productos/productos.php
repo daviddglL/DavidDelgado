@@ -50,11 +50,13 @@ require_once("../noticias/noticias.php");
     <div class="container">
         <?php
             headerr();
-            echo "<div class='toggle-container'>
+            if (isset($_SESSION['id_socio']) && $_SESSION['id_socio'] != 0) {
+                echo "<div class='toggle-container'>
                     <button class='button toggle-cart '>
                         <i class='fas fa-shopping-cart '></i>
                     </button>
                   </div>";
+            }
             contactos();
             echo "<div class='secc'><!--sección central-->";
         ?>
